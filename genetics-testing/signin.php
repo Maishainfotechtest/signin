@@ -84,12 +84,12 @@ if (isset($_POST['submit'])) {
                                     <p id="reg_msg"></p>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="fname" id="f_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your First Name"  required>
-                                            <p class="text-danger" id="f_nameError">**error</p>
+                                            <input type="text" name="fname" id="f_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your First Name"  onkeyup="FirstNameValidation()" required>
+                                            <p class="text-danger" id="f_nameError"> </p>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="lname" id="l_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your Last Name" required>
-                                            <p class="text-danger" id="l_nameError">**error</p>
+                                            <input type="text" name="lname" id="l_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your Last Name" onkeyup="LastNameValidation()" required>
+                                            <p class="text-danger" id="l_nameError"></p>
                                         </div>
                                     </div>
 
