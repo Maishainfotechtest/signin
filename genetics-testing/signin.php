@@ -1,19 +1,66 @@
-﻿<?php include('includes/header.php');
-
+﻿<?php
+session_start();
+$msg = " ";
+include('includes/header.php');
 include 'connection.php';
-
+  
+//on submit button new account created
 if (isset($_POST['submit'])) {
-   $f_name = $_POST['fname'];
-   $l_name = $_POST['lname'];
-   $email = $_POST['email'];
-   $country = $_POST['country'];
-   $phone = $_POST['phone'];
-   $date = $_POST['date'];
-   $password = $_POST['password'];
+    $CID = openssl_random_pseudo_bytes(8);
+    $CID = bin2hex($CID);
+    $joindate = date('Y:m:d');
+    $jointime = date("h:i:s");
+    $f_name = $_POST['fname'];
+    $l_name = $_POST['lname'];
+    $email = $_POST['email'];
+    $country = $_POST['country'];
+    $phone = $_POST['phone'];
+    $DOB = $_POST['date'];
+    $password = $_POST['password'];
 
-   echo $f_name ." ". $l_name . " " . $email . " " . $country . " " . $phone . " " . $date . " " . $password;
-   
+    $sql = "SELECT * FROM users WHERE email='$email'";
+
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) { ?>
+         <script>alert("email already exist. Try to login in your Account ");</script>
+    <?php } else {
+        // inserting data in users table 
+        $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID ', '$f_name', '$l_name', '$email', 'no', '$country', '$phone', 'no', '$DOB', ' $password', '$joindate', '$jointime', 'active')";
+
+        $run = mysqli_query($conn, $insqry);
+        if ($run) { ?>
+            <script>
+                alert("data inserted succesfully ");
+            </script>
+        <?php } else {  ?>
+            <script>
+                alert("failed");
+            </script>
+<?php }
+    }
 }
+
+//login to account
+if (isset($_POST['login'])) {
+    $emailCheck = $_POST['email_verify'];
+    $passCheck = $_POST['password_check'];
+
+    $sql = " select `id` from `users` where `email` = '$emailCheck' and `password` = '$passCheck' ";  
+    $result = mysqli_query($conn, $sql);  
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
+    $count = mysqli_num_rows($result);  
+    // If result matched $myusername and $mypassword, table row must be 1 row
+      echo $count;
+    if($count == 1) { ?>
+    <script>alert("login Succesfull");</script>
+       
+    <?php }else {
+       $msg = "Your Login Name or Password is invalid   " . mysqli_error($conn);
+    }
+ }
+
+
 ?>
 
 <!--site-main start-->
@@ -35,13 +82,15 @@ if (isset($_POST['submit'])) {
                         <div class="col-sm-12 col-lg-6">
                             <div class="login">
                                 <div class="heading">Member Login</div>
-                                <form action="" method="" id="login_form" name="">
-                                    <p id="login_msg"></p>
+                                <form action="" method="post" id="login_form" name="" >
+                                   
                                     <div class="form-group">
-                                        <input type="text" name="email" value="" class="form-control" placeholder="Email">
+                                        <input type="text" name="email_verify" value="" class="form-control" placeholder="Email">
+                                        <p id="login_msg " class="text-capitalize text-danger"><?php echo $msg; ?></p>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" name="password" value="" class="form-control" placeholder="Password">
+                                        <input type="password" name="password_check" value="" class="form-control" placeholder="Password">
+                                         
                                         <a href="https://www.mandarinresorts.in/user/forgot_password" style="color:#012b72; font-size:13px; float:right;">Forgot your password?</a>
                                     </div>
                                     <div class="row">
@@ -50,7 +99,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" name="submit" id="submit" class="btn">Log In</button>
+                                        <button type="submit" name="login" id="submit" class="btn">Log In</button>
                                     </div>
                                     <div class="form-group">
                                         <div class="middle"><span>or</span></div>
@@ -80,59 +129,60 @@ if (isset($_POST['submit'])) {
                                 <div class="row">
                                     <div class="heading col-sm-12">Member Registration</div>
                                 </div>
-                                <form action="" method="post" id="registration_form">
+                                <form action="" method="post" id="registration_form" onsubmit="validations()">
                                     <p id="reg_msg"></p>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="fname" id="f_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your First Name"  onkeyup="FirstNameValidation()" required>
-                                            <p class="text-danger" id="f_nameError"> </p>
+                                            <input type="text" name="fname" id="f_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your First Name" onkeyup="FirstNameValidation()" required>
+                                            <p class="text-danger  text-capitalize" id="f_nameError"> </p>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <input type="text" name="lname" id="l_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your Last Name" onkeyup="LastNameValidation()" required>
-                                            <p class="text-danger" id="l_nameError"></p>
+                                            <p class="text-danger text-capitalize" id="l_nameError"></p>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="email" id="email" value="" class="form-control" placeholder="Enter Your Email" required>
-                                            <p class="text-danger" id="emailError">**error</p>
+                                            <input type="email" name="email" id="email" value="" class="form-control" placeholder="Enter Your Email" onkeyup="emailVal()" required>
+                                            <p class="text-danger text-capitalize" id="emailError"></p>
+                                             
                                         </div>
 
                                         <div class="form-group col-sm-6">
-                                            <select class="form-control" name="country" id="country" required>
+                                            <select class="form-control" name="country" id="country" oninput="counVal()" required>
                                                 <option value="">Select Country</option>
                                                 <!-- Adding Country Name and Country code -->
                                                 <?php
                                                 $selCon = "select * from country ";
                                                 $run = mysqli_query($conn, $selCon);
                                                 while ($conData = mysqli_fetch_assoc($run)) { ?>
-                                                    <option value="<?php echo $conData['phonecode'];?>"> <?php echo $conData['name'];?><span style="color: blue;" name="c_code"> (<?php echo $conData['phonecode'];?>)</span> </option>
+                                                    <option value="+<?php echo $conData['phonecode']; ?>"> <?php echo $conData['name']; ?><span style="color: blue;" name="c_code"> (+<?php echo $conData['phonecode']; ?>)</span> </option>
                                                 <?php  } ?>
 
                                             </select>
-                                            <p class="text-danger" id="countryError">**error</p>
+                                            <p class="text-danger text-capitalize" id="countryError"></p>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="phone" id="phone" value="" class="form-control" placeholder="Enter Your Phone" required>
-                                            <p class="text-danger" id="phoneError">**error</p>
+                                            <input type="text" name="phone" id="phone" value="" class="form-control" placeholder="Enter Your Phone" onkeyup="phoneVal()" required>
+                                            <p class="text-danger text-capitalize" id="phoneError"></p>
                                         </div>
                                         <div class="form-group col-sm-6 date">
-                                            <input type="date" value="2018-01-01" name="date" required>
-                                            <p class="text-danger" id="dateError">**error</p>
+                                            <input type="date" name="date" oninput="dateVal()" required>
+                                            <p class="text-danger text-capitalize" id="dateError"></p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="password" name="password" id="password" value="" class="form-control" placeholder="Enter Your Password" required>
-                                            <p class="text-danger" id="passError">**error</p>
+                                            <input type="password" name="password" id="password" value="" class="form-control" placeholder="Enter Your Password" onkeyup="passVal()" required>
+                                            <p class="text-danger text-capitalize" id="passError"></p>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <input type="password" name="con_password" id="con_password" value="" class="form-control" placeholder="Enter Your Confirm Password" required>
-                                            <p class="text-danger" id="con_passError">**error</p>
+                                            <input type="password" name="con_password" id="con_password" value="" class="form-control" placeholder="Enter Your Confirm Password" onkeyup="cpassVal()" required>
+                                            <p class="text-danger text-capitalize" id="con_passError"></p>
                                         </div>
                                     </div>
 
@@ -145,10 +195,10 @@ if (isset($_POST['submit'])) {
                                     <div class="row">
 
                                         <div class="form-group col-sm-12">
-                                            <button type="submit" name="submit" id="submit" class="btn">Register</button>
+                                            <button type="submit" name="submit" id="submit"   class="btn">Register</button>
                                         </div>
                                     </div>
-
+                                    abcd@12
                                 </form>
                             </div>
                         </div>
