@@ -1,0 +1,92 @@
+
+ 
+button {
+  color: #000;
+  background-color: #999;
+  margin-top: 20px;
+}
+
+/* The snackbarlightlight - position it at the bottom and in the middle of the screen */
+#snackbarlight {
+    visibility: hidden;
+    min-width: 212px;
+    box-shadow: 1px 1px 1px 1px solid;
+    margin-left: -130px;
+    box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -1px 1px 7px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
+    background-color: #2190ad;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 7px;
+    position: fixed;
+    z-index: 1;
+     
+    left: 92%;
+    top: 22%;
+    height: 6vh;
+    bottom: 0px;
+  
+  /* 30px from the bottom */
+}
+
+/* Show the snackbarlight when clicking on a button (class added with JavaScript) */
+.show {
+  visibility: visible !important;
+  /* Show the snackbarlight */
+
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbarlight.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.3s, fadeout 0.6s 3.5s;
+  animation: fadein 0.3s, fadeout 0.6s 3.5s;
+}
+
+/* Animations to fade the snackbarlight in and out */
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
