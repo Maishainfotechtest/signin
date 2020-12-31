@@ -43,7 +43,7 @@ include 'connection.php'; ?>
                     <div class="accordion">
                         <!-- Activate Button -->
                         <div class="toggle ttm-style-classic ttm-toggle-title-bgcolor-grey ttm-control-right-true">
-                            <div class="toggle-title" style=" width: 38%; position: absolute;left: 30%;"><a href="index.php" style="text-align: center;">Verify your Email</a></div>
+                            <div   style=" background: #0369a4; width: 38%; position: absolute; left: 30%; text-align: center;padding: 9px;text-transform: capitalize; border-radius: 3px; font-weight: 500;"><a href="index.php" style="text-align: center;" class="text-white">Verify your Email</a></div>
 
                         </div>
                         <!-- Activate Button end -->
