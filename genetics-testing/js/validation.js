@@ -86,7 +86,6 @@ function LastNameValidation() {
     document.getElementById("submitRejis").style.cursor = "pointer";
   }
 }
-
 //Email Validation 
 function emailVal() {
   var email = document.getElementById('email').value;
@@ -175,7 +174,6 @@ function phoneVal() {
     }
   }
 }
-
 //date validation 
 function dateVal() {
 
@@ -189,10 +187,9 @@ function dateVal() {
     datesuccess.innerText = "  ";
   } else {
     dateError.innerText = " ";
-    datesuccess.innerText = "correct ✔";
+    datesuccess.innerText = "correct✔";
   }
 }
-
 //password Validation
 function passVal() {
   var pass = document.getElementById('password').value;
@@ -226,7 +223,6 @@ function passVal() {
   }
 
 }
-
 //confirm password 
 function cpassVal() {
   var cpass = document.getElementById('con_password').value;
@@ -258,7 +254,6 @@ function cpassVal() {
 
 
 }
-
  
 // calling functions 
 function validations() {
@@ -271,12 +266,13 @@ function validations() {
   dateVal();
   passVal();
   cpassVal();
-
+  checkbox();
 
 }
+//check box validation
 function stop(event) {
   event.preventDefault();
 }
-//snack bar
+
 
 
