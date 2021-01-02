@@ -254,8 +254,7 @@ function cpassVal() {
 
 
 }
- 
-// calling functions 
+ // calling functions 
 function validations() {
 
   FirstNameValidation();
@@ -266,7 +265,7 @@ function validations() {
   dateVal();
   passVal();
   cpassVal();
-  checkbox();
+  
 
 }
 //check box validation

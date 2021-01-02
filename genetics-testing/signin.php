@@ -100,7 +100,8 @@ if (isset($_POST['login'])) {
                                     <div class="heading col-sm-12">Member Registration</div>
                                 </div>
 
-                                <div id="snackbar">Here goes the toast message</div>
+                               
+                               
                                 <form action="#" method="post" id="registration_form">
                                     <p id="reg_msg"></p>
                                     <div class="row">
@@ -170,8 +171,8 @@ if (isset($_POST['login'])) {
                                     <div class="row">
                                         <div class="form-group col-sm-12">
                                             <label style="font-weight:400; float:none; text-align:left;" class="sign_up">
-                                                <input type="checkbox" name="checkbox"    value="check" id="check" required>I have read terms of service & Privacy statement</label>
-                                            <p class="text-danger text-capitalize" id="checkError"></p>
+                                                <input type="checkbox" name="checkbox"      required>I have read terms of service & Privacy statement</label>
+                                             
                                         </div>
                                     </div>
 
@@ -205,6 +206,7 @@ if (isset($_POST['login'])) {
 
     <!-- The actual snackbar -->
     <p id="snackbarlight" value="" class=" text-capitalize">Some text some message..</p>
+    <p><?php echo $_SESSION['activated']; ?></p>
 </section>
 
 <?php

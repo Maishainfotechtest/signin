@@ -42,7 +42,7 @@ include 'connection.php'; ?>
                         <!-- Activate Button end -->
                     </div>
                     <div class="container " style="display: flex;width: 50%;position: relative;top: 77px;left: -1%; justify-content: space-evenly;">
-                        <p style="position: relative; top: 7px;font-weight: bold; font-size:20px;"><span id="min">0.</span><span id="demo">15</span></p>
+                        <p style="position: relative; top: 7px;font-weight: bold; font-size:20px;"><span id="min">0.</span><span id="demo">60</span></p>
                     </div>
 
                 </div>
@@ -60,7 +60,7 @@ include 'connection.php'; ?>
 
 <script>
     function emailverification() {
-        var countDown = 15;
+        var countDown = 60;
         var clickable = document.getElementById('resend');
         var time = setInterval(function() {
             countDown--;

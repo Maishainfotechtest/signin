@@ -1,8 +1,8 @@
 <?php
-$email ="maishatest89@gmail.com";
+$email ="lokeshgaria8811@gmail.com";
 $subject ="Simple Email Test via PHP";
 $body ="Hi,click on the link to activate your account";
-$headers ="From: maishainfotech123@gmail.com";
+$headers="From: maishainfotech123@gmail.com";
 
 if (mail($email,$subject,$body,$headers)) {
     echo "Email successfully sent to $email...";
