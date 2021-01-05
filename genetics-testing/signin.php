@@ -1,10 +1,15 @@
 ﻿<?php
 include('includes/header.php');
 include 'connection.php';
-//login with google 
+//Facebook – Youturn Genetics 
+//ID- 9310320173
+//Password- gaurav@0011
 
-$login_button = '';
+ 
+
+//login with google 
 include 'config.php';
+
 if (isset($_GET["code"])) {
 
     $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
@@ -47,27 +52,26 @@ if (isset($_GET["code"])) {
         $name = $_SESSION['user_first_name'];
         $lname = $_SESSION['user_last_name'];
         $email = $_SESSION['user_email_address'];
-        $CID = openssl_random_pseudo_bytes(8);
-        $CID = bin2hex($CID);
+        $CID = $_SESSION['access_token'];
+
         $joindate = date('Y:m:d');
         $jointime = date("h:i:s");
 
 
 
-        $insqry = "INSERT INTO `users` (  `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (  '$CID ', '$name', '$lname', '$email', 'no', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
+        $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID ', '$name', '$lname', '$email', 'no', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
 
         $run = mysqli_query($conn, $insqry);
-        if ($run) {
-            ?>
-            <div id="alertbox" class="alert alert-success    " role="alert">
+        if ($run) { ?>
+            <div id="alertbox" class="alert alert-success " role="alert">
                 <strong> Sucess .</strong> Registration Completed . Please Verify your Email.
-                <button type="button"  onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+                <button type="button" onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
             </div>
-        <?php 
+        <?php
         } else { ?>
             <div id="alertbox" class="alert alert-danger    " role="alert">
                 <strong> OPPS!</strong> Email Already Exist ! Please login in your account.
-                <button type="button"  onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+                <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
             </div>
         <?php }
     }
@@ -82,17 +86,24 @@ if (isset($_POST['login'])) {
     $sql = " select * from `users` where `email` = '$emailCheck' and `password` = '$passCheck' ";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $verify = $row['email_verify'];
+    $_SESSION['username'] = $row['f_name'];
     $count = mysqli_num_rows($result);
+
     // If result matched $myusername and $mypassword, table row must be 1 row
 
-    if ($count == 1) {
+    if ($count == 1 && $verify == 'yes') {
         $_SESSION['username'] = $row['f_name'];
+
         ?>
         <script>
             window.location.replace("http://localhost/genetics-testing/index.php");
         </script>
 <?php
 
+    }
+    if ($count == 1 && $verify == 'no') {
+        echo  $_SESSION['username'] . " Please Verify your Account";
     } else {
         $msg = " invalid email id or password  " . mysqli_error($conn);
     }
@@ -147,10 +158,10 @@ if (isset($_POST['login'])) {
                                     <div class="form-group">
                                         <div class="middle"><span>or</span></div>
                                         <div class="facebook">
-                                            <a href="#"><img src="images/facebook-icon.png" alt="">Login with Facebook</a>
+                                            <a href="<?php echo $facebook_login_url; ?>"><img src="images/facebook-icon.png" alt="">Login with Facebook</a>
                                         </div>
                                         <div class="google_plus">
-                                            <a href="<?php echo  $google_client->createAuthUrl() ?>"><img src="images/googleLogo.jpg" alt="">Login with Gmail</a>
+                                            <a href="<?php echo  $google_client->createAuthUrl() ?>"><img src="images/gmail-icon.png" alt="">Login with Gmail</a>
                                         </div>
                                     </div>
 
@@ -172,9 +183,6 @@ if (isset($_POST['login'])) {
                                 <div class="row">
                                     <div class="heading col-sm-12">Member Registration</div>
                                 </div>
-
-
-
                                 <form action="#" method="post" id="registration_form">
                                     <p id="reg_msg"></p>
                                     <div class="row">
@@ -365,9 +373,6 @@ if (isset($_POST['submit'])) {
                 var formid = document.getElementById('registration_form');
                 var snackbar = document.getElementById('snackbarlight');
                 snackbar.innerText = "Registraition Failed";
-                 
-              
-               
             </script>
 <?php }
     }
