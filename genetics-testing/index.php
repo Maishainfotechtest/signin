@@ -1,4 +1,78 @@
-﻿<?php include('includes/header.php')
+﻿<?php include('includes/header.php');
+include "connection.php";
+include 'config.php';
+// login with google
+if (isset($_GET["code"])) {
+
+    $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+
+
+    if (!isset($token['error'])) {
+
+        $google_client->setAccessToken($token['access_token']);
+
+
+        $_SESSION['access_token'] = $token['access_token'];
+
+
+        $google_service = new Google_Service_Oauth2($google_client);
+
+
+        $data = $google_service->userinfo->get();
+
+        if (!empty($data['id'])) {
+            $_SESSION['id'] = $data['id'];
+        }
+
+        if (!empty($data['given_name'])) {
+            $_SESSION['user_first_name'] = $data['given_name'];
+        }
+
+        if (!empty($data['family_name'])) {
+            $_SESSION['user_last_name'] = $data['family_name'];
+        }
+
+        if (!empty($data['email'])) {
+            $_SESSION['user_email_address'] = $data['email'];
+        }
+
+        if (!empty($data['gender'])) {
+            $_SESSION['user_gender'] = $data['gender'];
+        }
+
+        if (!empty($data['picture'])) {
+            $_SESSION['user_image'] = $data['picture'];
+        }
+           
+         
+
+        $name = $_SESSION['user_first_name'];
+        $lname = $_SESSION['user_last_name'];
+        $email = $_SESSION['user_email_address'];
+        $CID = "Gog".$_SESSION['id'];
+
+        $joindate = date('Y:m:d');
+        $jointime = date("h:i:s");
+
+
+
+        $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
+
+        $run = mysqli_query($conn, $insqry);
+        if ($run) { ?>
+            <div id="alertbox" class="alert alert-success " role="alert">
+                <strong> Sucess .</strong> Registration Completed .  Please Login to Your Account.
+                <button type="button" onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+            </div>
+        <?php
+        } else { ?>
+            <div id="alertbox" class="alert alert-danger    " role="alert">
+                <strong>ERROR </strong> Email Already Exist ! . Try to login .  
+                <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+            </div>
+        <?php }
+    }
+}
   ?>
   
 <div id="rev_slider_5_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container slide-overlay" data-alias="classic4export" data-source="gallery">

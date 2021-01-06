@@ -1,15 +1,14 @@
 ﻿<?php
+
 include('includes/header.php');
 include 'connection.php';
 //Facebook – Youturn Genetics 
 //ID- 9310320173
 //Password- gaurav@0011
 
- 
-
 //login with google 
-include 'config.php';
 
+include 'config.php';
 if (isset($_GET["code"])) {
 
     $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
@@ -28,6 +27,9 @@ if (isset($_GET["code"])) {
 
         $data = $google_service->userinfo->get();
 
+        if (!empty($data['id'])) {
+            $_SESSION['id'] = $data['id'];
+        }
 
         if (!empty($data['given_name'])) {
             $_SESSION['user_first_name'] = $data['given_name'];
@@ -49,17 +51,19 @@ if (isset($_GET["code"])) {
             $_SESSION['user_image'] = $data['picture'];
         }
 
+
+
         $name = $_SESSION['user_first_name'];
         $lname = $_SESSION['user_last_name'];
         $email = $_SESSION['user_email_address'];
-        $CID = $_SESSION['access_token'];
+        $CID = $_SESSION['id'];
 
         $joindate = date('Y:m:d');
         $jointime = date("h:i:s");
 
 
 
-        $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID ', '$name', '$lname', '$email', 'no', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
+        $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
 
         $run = mysqli_query($conn, $insqry);
         if ($run) { ?>
@@ -70,13 +74,12 @@ if (isset($_GET["code"])) {
         <?php
         } else { ?>
             <div id="alertbox" class="alert alert-danger    " role="alert">
-                <strong> OPPS!</strong> Email Already Exist ! Please login in your account.
+                <strong> ERROR!</strong> Email Already Exist ! Please login in your account.
                 <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
             </div>
         <?php }
     }
 }
-
 //login to account
 $msg = " ";
 if (isset($_POST['login'])) {
@@ -99,16 +102,92 @@ if (isset($_POST['login'])) {
         <script>
             window.location.replace("http://localhost/genetics-testing/index.php");
         </script>
-<?php
+    <?php
 
     }
     if ($count == 1 && $verify == 'no') {
-        echo  $_SESSION['username'] . " Please Verify your Account";
+        echo  " " .$_SESSION['username']. " Please Verify your Account";
     } else {
         $msg = " invalid email id or password  " . mysqli_error($conn);
     }
 }
 
+//facebook login
+include('fbinit.php');
+$facebook_output = '';
+$facebook_helper = $facebook->getRedirectLoginHelper();
+if (isset($_GET['code'])) {
+    if (isset($_SESSION['access_token'])) {
+        $access_token = $_SESSION['access_token'];
+    } else {
+        $access_token = $facebook_helper->getAccessToken();
+
+        $_SESSION['access_token'] = $access_token;
+
+        $facebook->setDefaultAccessToken($_SESSION['access_token']);
+    }
+
+    $_SESSION['user_id'] = '';
+    $_SESSION['user_name'] = '';
+    $_SESSION['user_email_address'] = '';
+    $_SESSION['user_image'] = '';
+
+    $graph_response = $facebook->get("/me?fields=name,first_name,last_name,email", $access_token);
+
+    $facebook_user_info = $graph_response->getGraphUser();
+
+    if (!empty($facebook_user_info['id'])) {
+        $_SESSION['user_image'] = 'http://graph.facebook.com/' . $facebook_user_info['id'] . '/picture';
+        $_SESSION['id'] = $facebook_user_info['id'];
+        $_SESSION['user_email_address'] = $facebook_user_info['email'];
+    }
+
+    if (!empty($facebook_user_info['first_name'])) {
+        $_SESSION['first_name'] = $facebook_user_info['first_name'];
+    }
+
+    if (!empty($facebook_user_info['last_name'])) {
+        $_SESSION['last_name'] = $facebook_user_info['last_name'];
+    }
+
+    if (!empty($facebook_user_info['email'])) {
+        $_SESSION['user_email'] = $facebook_user_info['email'];
+    }
+
+    $fname =  $_SESSION['first_name'];
+    $lname =  $_SESSION['last_name'];
+    $email = $_SESSION['user_email'];
+    
+    $CID = "fb" .$_SESSION['id'];
+
+    $joindate = date('Y:m:d');
+    $jointime = date("h:i:s");
+
+
+
+    $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$fname', '$lname', '$email', 'yes', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
+
+    $run = mysqli_query($conn, $insqry);
+    if ($run) { ?>
+        <div id="alertbox" class="alert alert-success " role="alert">
+            <strong> Sucess .</strong> Registration Completed . Please Login to Your Account.
+            <button type="button" onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+        </div>
+    <?php
+    } else { ?>
+        <div id="alertbox" class="alert alert-danger    " role="alert">
+            <strong> ERROR!</strong> Email Already Exist ! Try To Login.
+            <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
+        </div>
+<?php }
+} else {
+    // Get login url
+    $facebook_permissions = ['email']; // Optional permissions
+
+    $facebook_login_url = $facebook_helper->getLoginUrl('http://localhost/genetics-testing/signin.php', $facebook_permissions);
+
+    $_SESSION['facebook-link'] = $facebook_login_url;
+}
 
 
 ?>
@@ -158,7 +237,7 @@ if (isset($_POST['login'])) {
                                     <div class="form-group">
                                         <div class="middle"><span>or</span></div>
                                         <div class="facebook">
-                                            <a href="<?php echo $facebook_login_url; ?>"><img src="images/facebook-icon.png" alt="">Login with Facebook</a>
+                                            <a href="<?php echo  $facebook_login_url; ?>"><img src="images/facebook-icon.png" alt="">Login with Facebook</a>
                                         </div>
                                         <div class="google_plus">
                                             <a href="<?php echo  $google_client->createAuthUrl() ?>"><img src="images/gmail-icon.png" alt="">Login with Gmail</a>
