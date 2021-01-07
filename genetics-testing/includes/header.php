@@ -1,9 +1,10 @@
 <?php session_start(); 
-if (!isset($_SESSION['username'])) {
-   $msg = "sign in";
-}else{
-  $msg = $_SESSION['username'];
-}
+ if (isset($_SESSION['username'])) {
+   $name =  $_SESSION['username'];
+ }else {
+    $name = "Sign in";
+ }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -150,7 +151,7 @@ if (!isset($_SESSION['username'])) {
                     </ul>
                   </nav>
                   <div class="header_extra d-flex flex-row align-items-center justify-content-end">
-                    <div class=""> <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-icon-btn-left ttm-btn-color-grey text-capitalize" href="signin.php"> <i class="fa fa-user"></i> <?php echo  $msg; ?></a>
+                    <div class=""> <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-icon-btn-left ttm-btn-color-grey text-capitalize" href="signin.php"> <i class="fa fa-user"></i> <?php echo $name; ?></a>
                     </div>
                     <div class=""> <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-icon-btn-left ttm-btn-color-grey" href="logout.php"> Logout</a>
                     </div>

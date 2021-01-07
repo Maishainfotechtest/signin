@@ -63,20 +63,13 @@ if (isset($_GET["code"])) {
 
 
 
-        $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
-
+        $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'active')";
         $run = mysqli_query($conn, $insqry);
         if ($run) { ?>
-            <div id="alertbox" class="alert alert-success " role="alert">
-                <strong> Sucess .</strong> Registration Completed . Please Verify your Email.
-                <button type="button" onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
-            </div>
+            <!-- fURTHER CODE GOES HERE -->
         <?php
         } else { ?>
-            <div id="alertbox" class="alert alert-danger    " role="alert">
-                <strong> ERROR!</strong> Email Already Exist ! Please login in your account.
-                <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
-            </div>
+             <!-- fURTHER CODE GOES HERE -->
         <?php }
     }
 }
@@ -106,7 +99,7 @@ if (isset($_POST['login'])) {
 
     }
     if ($count == 1 && $verify == 'no') {
-        echo  " " .$_SESSION['username']. " Please Verify your Account";
+        echo  " " . $_SESSION['username'] . " Please Verify your Account";
     } else {
         $msg = " invalid email id or password  " . mysqli_error($conn);
     }
@@ -157,28 +150,24 @@ if (isset($_GET['code'])) {
     $fname =  $_SESSION['first_name'];
     $lname =  $_SESSION['last_name'];
     $email = $_SESSION['user_email'];
-    
-    $CID = "fb" .$_SESSION['id'];
+
+    $CID = "fb" . $_SESSION['id'];
 
     $joindate = date('Y:m:d');
     $jointime = date("h:i:s");
 
 
 
-    $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$fname', '$lname', '$email', 'yes', ' ', ' ', 'no', ' ', '1', '$joindate', '$jointime', 'active')";
+    $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
 
     $run = mysqli_query($conn, $insqry);
-    if ($run) { ?>
-        <div id="alertbox" class="alert alert-success " role="alert">
-            <strong> Sucess .</strong> Registration Completed . Please Login to Your Account.
-            <button type="button" onclick="exitdiv()" style="color: #46a75d;;background-color: #d4edda;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
-        </div>
+    if ($run) { 
+        $_SESSION['username'] = $fname;
+       ?>
+         <script> window.location.replace("http://localhost/genetics-testing/");</script>
     <?php
     } else { ?>
-        <div id="alertbox" class="alert alert-danger    " role="alert">
-            <strong> ERROR!</strong> Email Already Exist ! Try To Login.
-            <button type="button" onclick="exitdiv()" style="color: #ca4f20;background-color: #f8d7da;margin-top: 0px;font-size: 25px;border-radius: 33px; padding:2px 21px;">&times;</button>
-        </div>
+         <!-- fURTHER CODE GOES HERE -->
 <?php }
 } else {
     // Get login url
@@ -310,7 +299,7 @@ if (isset($_GET['code'])) {
                                             <p class="text-success text-capitalize" id="phonesuccess"></p>
                                         </div>
                                         <div class="form-group col-sm-6 date">
-                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" max="2018-12-31" required>
+                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" value="2000-01-31" max="2018-12-31" required>
                                             <p class="text-danger text-capitalize" id="dateError"></p>
                                             <p class="text-success text-capitalize" id="dateSuccess"></p>
                                         </div>
