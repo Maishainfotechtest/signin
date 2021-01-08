@@ -1,4 +1,30 @@
 
+/*logout btn css */
+.logout{
+  position: absolute;
+  top: -11px;
+  padding: 3px 8px;
+  left: 18px;
+  font-weight: 500;
+  display: none;
+  width: 100px;
+  background: #fcfafb;
+}
+ #signin:hover .logout{
+display: block;
+} 
+
+/*sign in msg correct/invalid*/
+.SigninMsg{
+   display: block;
+    /* display: inline; */
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 5px;
+    left: 5px;
+}
+/* input in sign in */
  
 button {
   color: #000;

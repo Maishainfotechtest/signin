@@ -1,9 +1,17 @@
-<?php session_start(); 
- if (isset($_SESSION['username'])) {
-   $name =  $_SESSION['username'];
- }else {
-    $name = "Sign in";
- }
+<?php session_start();
+if (isset($_SESSION['username'])) {
+  $name =  $_SESSION['username'];
+  $logclass =  "fa fa-sign-out";
+  $link = " ";
+  $trilogo = "dropdown-toggle";
+  $input = "Log Out";
+} else {
+  $name = "Sign in";
+  $logclass =  " ";
+  $link = "signin.php";
+  $trilogo = " ";
+  $input = " ";
+}
 
 ?>
 <!DOCTYPE html>
@@ -13,10 +21,11 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content=" width=device-width, initial-scale=1, maximum-scale=1">
- <script>
-   function  exitdiv() {
-                      document.getElementById("alertbox").style.visibility="hidden";
-                }</script>
+  <script>
+    function exitdiv() {
+      document.getElementById("alertbox").style.visibility = "hidden";
+    }
+  </script>
   <title>Genetic Testing</title>
 
   <!-- favicon icon -->
@@ -56,13 +65,17 @@
 
   <!-- main -->
   <link rel="stylesheet" type="text/css" href="css\megamenu.css">
- <!--snack -->
- 
+  <!--snack -->
+
   <!-- responsive -->
   <link rel="stylesheet" type="text/css" href="css\responsive.css">
   <link rel="stylesheet" type="text/css" href="css\bootstrap-datetimepicker.css">
-  <link rel="stylesheet" href="css\snack.css"> 
-  <script src="https://www.mandarinresorts.in/application/views/js/jquery-1.11.3.min.js"></script>
+  <link rel="stylesheet" href="css\snack.css">
+   
+
+
+  <!--select2 search -->
+ 
 </head>
 
 <body>
@@ -148,13 +161,19 @@
                       <li> <a href="how-it-works.php">How it works</a></li>
                       <li> <a href="team.php">Team</a></li>
                       <li> <a href="shop.php" class="shop-menu">Shop</a></li>
+                      <li id="signin"><a class="<?php echo $trilogo; ?> text-capitalize " href="<?php echo $link; ?>"> <i class="fa fa-user"></i> <?php echo $name; ?></a>
+                        <ul class="">
+                          <li> <a class="logout " href="logout.php"><i class="<?php echo $logclass; ?>" aria-hidden="true"></i><?php echo $input ?></a></li>
+                        </ul>
+
+                      </li>
+
+
                     </ul>
                   </nav>
                   <div class="header_extra d-flex flex-row align-items-center justify-content-end">
-                    <div class=""> <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-icon-btn-left ttm-btn-color-grey text-capitalize" href="signin.php"> <i class="fa fa-user"></i> <?php echo $name; ?></a>
-                    </div>
-                    <div class=""> <a class="ttm-btn ttm-btn-size-md ttm-btn-shape-rounded ttm-icon-btn-left ttm-btn-color-grey" href="logout.php"> Logout</a>
-                    </div>
+
+
 
                     <div class="header_cart"> <a href="cart.php" class="button-cart">
                         <div class="cart_icon"><i class="ti ti-shopping-cart"></i></div>

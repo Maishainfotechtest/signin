@@ -44,8 +44,6 @@ if (isset($_GET["code"])) {
       $_SESSION['user_image'] = $data['picture'];
     }
 
-
-
     $name = $_SESSION['user_first_name'];
     $lname = $_SESSION['user_last_name'];
     $email = $_SESSION['user_email_address'];
@@ -54,22 +52,35 @@ if (isset($_GET["code"])) {
     $joindate = date('Y:m:d');
     $jointime = date("h:i:s");
 
+    $CheckEmail = "SELECT * FROM users where email = '$email'";
+    $runqry = mysqli_query($conn, $CheckEmail);
+    $fbrow = mysqli_num_rows($runqry);
+    $fbdata = mysqli_fetch_array($runqry);
 
+    if ($fbrow == 1) {
+      $_SESSION['username'] = $fbdata['f_name'];
+      ?>
+         <script>
+                window.location.replace("http://localhost/genetics-testing/");
+            </script>
+        <?php
+    } else {
+     
+      $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
 
-    $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
-
-    $run = mysqli_query($conn, $insqry);
-    if ($run) {
-      $_SESSION['username'] = $name;
+      $run = mysqli_query($conn, $insqry);
+      if ($run) {
+        $_SESSION['username'] = $name;
 ?>
-      <script>
-        window.location.replace("http://localhost/genetics-testing/");
-      </script>
-    <?php
+        <script>
+          window.location.replace("http://localhost/genetics-testing/");
+        </script>
+      <?php
 
-    } else { ?>
-      <!-- fURTHER CODE GOES HERE -->
+      } else { ?>
+        <!-- fURTHER CODE GOES HERE -->
 <?php }
+    }
   }
 }
 ?>

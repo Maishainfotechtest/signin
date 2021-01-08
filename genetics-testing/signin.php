@@ -69,7 +69,7 @@ if (isset($_GET["code"])) {
             <!-- fURTHER CODE GOES HERE -->
         <?php
         } else { ?>
-             <!-- fURTHER CODE GOES HERE -->
+            <!-- fURTHER CODE GOES HERE -->
         <?php }
     }
 }
@@ -83,13 +83,15 @@ if (isset($_POST['login'])) {
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $verify = $row['email_verify'];
-    $_SESSION['username'] = $row['f_name'];
+
+    $username = $row['f_name'];
+
     $count = mysqli_num_rows($result);
 
     // If result matched $myusername and $mypassword, table row must be 1 row
 
     if ($count == 1 && $verify == 'yes') {
-        $_SESSION['username'] = $row['f_name'];
+        $_SESSION['username'] =  $username;
 
         ?>
         <script>
@@ -99,7 +101,7 @@ if (isset($_POST['login'])) {
 
     }
     if ($count == 1 && $verify == 'no') {
-        echo  " " . $_SESSION['username'] . " Please Verify your Account";
+        echo   $_SESSION['nonverified'] = $username   . " Please Verify your Account";
     } else {
         $msg = " invalid email id or password  " . mysqli_error($conn);
     }
@@ -156,19 +158,33 @@ if (isset($_GET['code'])) {
     $joindate = date('Y:m:d');
     $jointime = date("h:i:s");
 
+    $CheckEmail = "SELECT * FROM users where email = '$email'";
+    $runqry = mysqli_query($conn, $CheckEmail);
+    $fbrow = mysqli_num_rows($runqry);
+    $fbdata = mysqli_fetch_array($runqry);
 
+    if ($fbrow == 1) {
+        $_SESSION['username'] = $fbdata['f_name'];
+    ?>
+        <script>
+            window.location.replace("http://localhost/genetics-testing/");
+        </script>
+        <?php
+    } else {
+        $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
 
-    $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
-
-    $run = mysqli_query($conn, $insqry);
-    if ($run) { 
-        $_SESSION['username'] = $fname;
-       ?>
-         <script> window.location.replace("http://localhost/genetics-testing/");</script>
-    <?php
-    } else { ?>
-         <!-- fURTHER CODE GOES HERE -->
+        $run = mysqli_query($conn, $insqry);
+        if ($run) {
+            $_SESSION['username'] = $fname;
+        ?>
+            <script>
+                window.location.replace("http://localhost/genetics-testing/");
+            </script>
+        <?php
+        } else { ?>
+            <!-- fURTHER CODE GOES HERE -->
 <?php }
+    }
 } else {
     // Get login url
     $facebook_permissions = ['email']; // Optional permissions
@@ -229,7 +245,7 @@ if (isset($_GET['code'])) {
                                             <a href="<?php echo  $facebook_login_url; ?>"><img src="images/facebook-icon.png" alt="">Login with Facebook</a>
                                         </div>
                                         <div class="google_plus">
-                                            <a href="<?php echo  $google_client->createAuthUrl() ?>"><img src="images/gmail-icon.png" alt="">Login with Gmail</a>
+                                            <a href="<?php echo  $google_client->createAuthUrl() ?>"><img src="logo.jpg" alt="">Login with Gmail</a>
                                         </div>
                                     </div>
 
@@ -255,65 +271,66 @@ if (isset($_GET['code'])) {
                                     <p id="reg_msg"></p>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="fname" id="f_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your First Name" onkeyup="FirstNameValidation()" required>
-                                            <p class="text-danger  text-capitalize" id="f_nameError"> </p>
-                                            <p class="text-success text-capitalize" id="f_name_sucess"></p>
+                                            <input type="text" name="fname" id="f_name" value="" class="form-control  " placeholder="Enter Your First Name" onkeyup="FirstNameValidation()" required>
+                                            <p class="text-danger SigninMsg text-capitalize" id="f_nameError"> </p>
+                                            <p class="text-success   SigninMsg text-capitalize" id="f_name_sucess"></p>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="lname" id="l_name" value="" class="form-control" style="padding-left:15px;" placeholder="Enter Your Last Name" onkeyup="LastNameValidation()" required>
-                                            <p class="text-danger text-capitalize" id="l_nameError"></p>
-                                            <p class="text-success text-capitalize" id="l_name_sucess"></p>
+                                            <input type="text" name="lname" id="l_name" value="" class="form-control   " placeholder="Enter Your Last Name" onkeyup="LastNameValidation()" required>
+                                            <p class="text-danger SigninMsg  text-capitalize" id="l_nameError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="l_name_sucess"></p>
 
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="email" name="email" id="email" value="" class="form-control" placeholder="Enter Your Email" onkeyup="emailVal()" required>
-                                            <p class="text-danger text-capitalize" id="emailError"></p>
-                                            <p class="text-success text-capitalize" id="emailsucess"></p>
+                                            <input type="email" name="email" id="email" value="" class="form-control inputsignin" placeholder="Enter Your Email" onkeyup="emailVal()" required>
+                                            <p class="text-danger SigninMsg text-capitalize" id="emailError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="emailsucess"></p>
 
                                         </div>
+                                        <input list="browsers" name="browser" class="form-control" placeholder="--Select Country--" style="width: 49%;height: 49px;">
 
-                                        <div class="form-group col-sm-6">
-                                            <select class="form-control" name="country" id="country" oninput="counVal()" required>
-                                                <option value="">Select Country</option>
+                                        <div class="form-group   col-sm-6">
+                                            <datalist id="browsers" oninput="counVal()" required ">
+
                                                 <!-- Adding Country Name and Country code -->
                                                 <?php
                                                 $selCon = "select * from country ";
                                                 $run = mysqli_query($conn, $selCon);
                                                 while ($conData = mysqli_fetch_assoc($run)) { ?>
-                                                    <option value="+<?php echo $conData['phonecode']; ?>"> <?php echo $conData['name']; ?><span style="color: blue;" name="c_code"> (+<?php echo $conData['phonecode']; ?>)</span> </option>
+                                                    <option value="+<?php echo $conData['phonecode']." " .$conData['name']; ?>">  <span style="color: blue;" name="c_code">  </span> </option>
                                                 <?php  } ?>
 
-                                            </select>
-                                            <p class="text-danger text-capitalize" id="countryError"></p>
-                                            <p class="text-success text-capitalize" id="countrySuccess"></p>
+                                            </datalist>
+                                            <p class="text-danger SigninMsg text-capitalize" id="countryError"></p>
+                                            <p class="text-success SigninMsg  text-capitalize" id="countrySuccess"></p>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="text" name="phone" id="phone" value="" class="form-control" placeholder="Enter Your Phone" onkeyup="phoneVal()" required>
-                                            <p class="text-danger text-capitalize" id="phoneError"></p>
-                                            <p class="text-success text-capitalize" id="phonesuccess"></p>
+                                            <input type="text" name="phone" id="phone" value="" class="form-control inputsignin" placeholder="Enter Your Phone" onkeyup="phoneVal()" required>
+                                            <p class="text-danger SigninMsg SigninMsg text-capitalize" id="phoneError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="phonesuccess"></p>
                                         </div>
                                         <div class="form-group col-sm-6 date">
-                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" value="2000-01-31" max="2018-12-31" required>
-                                            <p class="text-danger text-capitalize" id="dateError"></p>
-                                            <p class="text-success text-capitalize" id="dateSuccess"></p>
+                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" value="2000-01-31" max="2018-12-31" class="form-control inputsignin" required>
+                                            <p class="text-danger SigninMsg text-capitalize" id="dateError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="dateSuccess"></p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
-                                            <input type="password" name="password" id="password" value="" class="form-control" placeholder="Enter Your Password" onkeyup="passVal()" required>
-                                            <p class="text-danger text-capitalize" id="passError"></p>
-                                            <p class="text-success text-capitalize" id="passcorrect"></p>
+                                            <input type="password" name="password" id="password" value="" class="form-control inputsignin" placeholder="Enter Your Password" onkeyup="passVal()" required>
+                                            <p class="text-danger  SigninMsg text-capitalize" id="passError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="passcorrect"></p>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <input type="password" name="con_password" id="con_password" value="" class="form-control" placeholder="Enter Your Confirm Password" onkeyup="cpassVal()" required>
-                                            <p class="text-danger text-capitalize" id="con_passError"></p>
-                                            <p class="text-success text-capitalize" id="con_passSuccess"></p>
+                                            <input type="password" name="con_password" id="con_password" value="" class="form-control inputsignin" placeholder="Enter Your Confirm Password" onkeyup="cpassVal()" required>
+                                            <p class="text-danger SigninMsg text-capitalize" id="con_passError"></p>
+                                            <p class="text-success SigninMsg text-capitalize" id="con_passSuccess"></p>
                                         </div>
                                     </div>
 
@@ -447,6 +464,11 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
+<script>
+    $(function() {
+        $('.selectpicker').selectpicker();
+    });
+</script>
 <!--footer start-->
 <?php include('includes/footer.php');
 ?>
