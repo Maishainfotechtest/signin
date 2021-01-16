@@ -52,12 +52,13 @@ p {
 }
 input[type="date"] {width: 100%;
     color: #8a91ac;
+    height: 51px;
     padding:9px 15px 9px;
     border-radius: 3px;
     font-weight: 400;
     background-color: #fff;
     text-transform: inherit;
-    border: 1px solid rgba(0, 43, 92, 0.08);
+    border: 1px solid #b9c5d2;
     font-size: 14px;
     outline: none;
     line-height: inherit;

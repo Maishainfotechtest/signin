@@ -1,7 +1,7 @@
 ﻿<?php
 
 include('includes/header.php');
-include 'connection.php';
+
 //Facebook – Youturn Genetics 
 //ID- 9310320173
 //Password- gaurav@0011
@@ -83,7 +83,7 @@ if (isset($_POST['login'])) {
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $verify = $row['email_verify'];
-
+    $cid = $row['cid'];
     $username = $row['f_name'];
 
     $count = mysqli_num_rows($result);
@@ -92,17 +92,31 @@ if (isset($_POST['login'])) {
 
     if ($count == 1 && $verify == 'yes') {
         $_SESSION['username'] =  $username;
-
+        $_SESSION['user_email'] = $emailCheck;
         ?>
+
         <script>
-            window.location.replace("http://localhost/genetics-testing/index.php");
+            window.location.replace("http://localhost/genetics-testing/dashboard.php");
         </script>
     <?php
 
     }
     if ($count == 1 && $verify == 'no') {
-        echo   $_SESSION['nonverified'] = $username   . " Please Verify your Account";
-    } else {
+        $_SESSION['nonverified'] = $username; ?>
+
+        <form action="" method="post" id="verifyform">
+            <div class="  " style="background-color: #0369a4!important">
+                <p class="ml-2 p-0 text-white" style="font-size: 18px;padding: 5px 0 !important;">Youturn Genetics <span> <i class="fa fa-times-circle" id="closeicon" aria-hidden="true"></i></span></p>
+            </div>
+            <p style="font-weight: 600;font-size: 15px;padding: 0px 15px;"> Your Email is Not Verified. Do you Want to verify your Email? </p>
+            <div id="varifyformdiv" class="d-flex justify-content-end">
+                <a href="mailVerify.php?cid=<?php echo $cid; ?>&email=<?php echo $emailCheck; ?>&fname=<?php echo $username; ?>" class=" " style="border-radius: 1px;padding: 1px 7px; height:27px; color: white;background-color: #0369a4; border-color: #0369a4; ">Yes</a>
+                <p class="  btn-danger mt-0 ml-2 mr-3" style="border-radius: 1px; padding: 1px 12px; cursor:pointer" id="close" onclick="close()">No</p>
+            </div>
+
+        </form>
+
+    <?php } else {
         $msg = " invalid email id or password  " . mysqli_error($conn);
     }
 }
@@ -157,7 +171,8 @@ if (isset($_GET['code'])) {
 
     $joindate = date('Y:m:d');
     $jointime = date("h:i:s");
-
+    date_default_timezone_set("Asia/Kolkata");   //India time (GMT+5:30)
+    $datetime = date('d-m-Y H:i:s');
     $CheckEmail = "SELECT * FROM users where email = '$email'";
     $runqry = mysqli_query($conn, $CheckEmail);
     $fbrow = mysqli_num_rows($runqry);
@@ -171,7 +186,7 @@ if (isset($_GET['code'])) {
         </script>
         <?php
     } else {
-        $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
+        $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', '$datetime', 'active')";
 
         $run = mysqli_query($conn, $insqry);
         if ($run) {
@@ -272,12 +287,12 @@ if (isset($_GET['code'])) {
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             <input type="text" name="fname" id="f_name" value="" class="form-control  " placeholder="Enter Your First Name" onkeyup="FirstNameValidation()" required>
-                                            <p class="text-danger SigninMsg text-capitalize" id="f_nameError"> </p>
+                                            <p class="text-danger invalidMsg text-capitalize" id="f_nameError"> </p>
                                             <p class="text-success   SigninMsg text-capitalize" id="f_name_sucess"></p>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <input type="text" name="lname" id="l_name" value="" class="form-control   " placeholder="Enter Your Last Name" onkeyup="LastNameValidation()" required>
-                                            <p class="text-danger SigninMsg  text-capitalize" id="l_nameError"></p>
+                                            <p class="text-danger invalidMsg  text-capitalize" id="l_nameError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="l_name_sucess"></p>
 
                                         </div>
@@ -286,50 +301,54 @@ if (isset($_GET['code'])) {
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             <input type="email" name="email" id="email" value="" class="form-control inputsignin" placeholder="Enter Your Email" onkeyup="emailVal()" required>
-                                            <p class="text-danger SigninMsg text-capitalize" id="emailError"></p>
+                                            <p class="text-danger invalidMsg text-capitalize" id="emailError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="emailsucess"></p>
 
                                         </div>
-                                        <input list="browsers" name="browser" class="form-control" placeholder="--Select Country--" style="width: 49%;height: 49px;">
 
-                                        <div class="form-group   col-sm-6">
-                                            <datalist id="browsers" oninput="counVal()" required ">
-
+                                        <div class="form-group col-sm-6">
+                                            
+                                            <select name="country" id="country"   class="form-control input" oninput="counVal()">
+                                                <option>select country</option>
                                                 <!-- Adding Country Name and Country code -->
                                                 <?php
-                                                $selCon = "select * from country ";
+                                                $selCon = "select * from countries ";
                                                 $run = mysqli_query($conn, $selCon);
                                                 while ($conData = mysqli_fetch_assoc($run)) { ?>
-                                                    <option value="+<?php echo $conData['phonecode']." " .$conData['name']; ?>">  <span style="color: blue;" name="c_code">  </span> </option>
+                                                    <option value=" +<?php echo $conData['phonecode'];  ?>"><span style="color: blue;"> <?php echo $conData['name'];  ?></span> </option>
                                                 <?php  } ?>
-
-                                            </datalist>
-                                            <p class="text-danger SigninMsg text-capitalize" id="countryError"></p>
+                                            </select>
+                                            <p class="text-danger invalidMsg text-capitalize" id="countryError"></p>
                                             <p class="text-success SigninMsg  text-capitalize" id="countrySuccess"></p>
+                                             
+
+                                            
                                         </div>
+
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             <input type="text" name="phone" id="phone" value="" class="form-control inputsignin" placeholder="Enter Your Phone" onkeyup="phoneVal()" required>
-                                            <p class="text-danger SigninMsg SigninMsg text-capitalize" id="phoneError"></p>
+                                            <p class="text-danger invalidMsg   text-capitalize" id="phoneError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="phonesuccess"></p>
                                         </div>
                                         <div class="form-group col-sm-6 date">
-                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" value="2000-01-31" max="2018-12-31" class="form-control inputsignin" required>
-                                            <p class="text-danger SigninMsg text-capitalize" id="dateError"></p>
+                                            <label for="" id="label"> DD/MM/YY</label>
+                                            <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" date_format="dd/mm/yy" value="2000-01-31" max="2018-12-31" class="form-control inputsignin" required>
+                                            <p class="text-danger invalidMsg text-capitalize" id="dateError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="dateSuccess"></p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             <input type="password" name="password" id="password" value="" class="form-control inputsignin" placeholder="Enter Your Password" onkeyup="passVal()" required>
-                                            <p class="text-danger  SigninMsg text-capitalize" id="passError"></p>
+                                            <p class="text-danger  invalidMsg text-capitalize" id="passError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="passcorrect"></p>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <input type="password" name="con_password" id="con_password" value="" class="form-control inputsignin" placeholder="Enter Your Confirm Password" onkeyup="cpassVal()" required>
-                                            <p class="text-danger SigninMsg text-capitalize" id="con_passError"></p>
+                                            <p class="text-danger invalidMsg text-capitalize" id="con_passError"></p>
                                             <p class="text-success SigninMsg text-capitalize" id="con_passSuccess"></p>
                                         </div>
                                     </div>
@@ -345,7 +364,7 @@ if (isset($_GET['code'])) {
                                     <div class="row">
 
                                         <div class="form-group col-sm-12">
-                                            <button type="submit" name="submit" id="submitRejis" onclick="validations()" class="btn">Register</button>
+                                            <button type="submit" name="submit" id="submitRejis" class="btn">Register</button>
 
                                         </div>
 
@@ -389,6 +408,8 @@ if (isset($_POST['submit'])) {
     $phone = $_POST['phone'];
     $DOB = $_POST['date'];
     $password = $_POST['password'];
+    date_default_timezone_set("Asia/Kolkata");   //India time (GMT+5:30)
+    $datetime = date('d-m-Y H:i:s');
 
     $sql = "SELECT * FROM users WHERE email='$email'";
 
@@ -404,17 +425,17 @@ if (isset($_POST['submit'])) {
                 // After 3 seconds, remove the show class from DIV
                 setTimeout(function() {
                     x.className = x.className.replace("show", "");
-                }, 3000);
+                }, 5000);
             }
             mySnackBar();
             var formid = document.getElementById('registration_form');
             var snackbar = document.getElementById('snackbarlight');
-            snackbar.innerText = "Email  Exist. Try To login ";
+            snackbar.innerText = "Account Exist , Please login with username and password. ";
         </script>
         <?php } else {
 
         // inserting data in users table 
-        $insqry = "INSERT INTO `users` (`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ('$CID ', '$f_name', '$l_name', '$email', 'no', '$country', '$phone', 'no', '$DOB', '$password', '$joindate', '$jointime', 'active')";
+        $insqry = "INSERT INTO `users` (`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime` , `status`) VALUES ('$CID ', '$f_name', '$l_name', '$email', 'no', '$country', '$phone', 'no', '$DOB', '$password', '$joindate', '$jointime', '$datetime' ,'active')";
 
         $run = mysqli_query($conn, $insqry);
         if ($run) {
@@ -431,7 +452,7 @@ if (isset($_POST['submit'])) {
                     // After 3 seconds, remove the show class from DIV
                     setTimeout(function() {
                         x.className = x.className.replace("show", "");
-                    }, 3000);
+                    }, 5000);
                 }
                 mySnackBar();
                 var btn = document.getElementById('submitRejis');
@@ -464,11 +485,22 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-<script>
-    $(function() {
-        $('.selectpicker').selectpicker();
-    });
-</script>
+
 <!--footer start-->
 <?php include('includes/footer.php');
 ?>
+<script>
+    $(document).ready(function() {
+        $('#close').click(function() {
+            $('#verifyform').css({
+                "display": "none"
+            });
+        });
+
+        $('#closeicon').click(function() {
+            $('#verifyform').css({
+                "display": "none"
+            });
+        });
+    })
+</script>

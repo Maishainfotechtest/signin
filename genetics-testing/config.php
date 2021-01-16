@@ -18,7 +18,7 @@ $google_client->setClientId('960031985280-gsflvqkihrmrm8fk9atchrbine4aoaal.apps.
 $google_client->setClientSecret('uwORXeOXiJC9yDV1_-QOrydb');
 
 //Set the OAuth 2.0 Redirect URI
-$google_client->setRedirectUri('http://localhost/genetics-testing/signin.php');
+$google_client->setRedirectUri('http://localhost/genetics-testing/index.php');
 
 // to get the email and profile 
 $google_client->addScope('email');

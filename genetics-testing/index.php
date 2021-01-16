@@ -33,7 +33,7 @@ if (isset($_GET["code"])) {
     }
 
     if (!empty($data['email'])) {
-      $_SESSION['user_email_address'] = $data['email'];
+      $_SESSION['user_email'] = $data['email'];
     }
 
     if (!empty($data['gender'])) {
@@ -46,12 +46,13 @@ if (isset($_GET["code"])) {
 
     $name = $_SESSION['user_first_name'];
     $lname = $_SESSION['user_last_name'];
-    $email = $_SESSION['user_email_address'];
+    $email = $_SESSION['user_email'];
     $CID = "Gog" . $_SESSION['id'];
 
     $joindate = date('Y:m:d');
     $jointime = date("h:i:s");
-
+    date_default_timezone_set("Asia/Kolkata");   //India time (GMT+5:30)
+    $datetime = date('d-m-Y H:i:s');
     $CheckEmail = "SELECT * FROM users where email = '$email'";
     $runqry = mysqli_query($conn, $CheckEmail);
     $fbrow = mysqli_num_rows($runqry);
@@ -66,7 +67,7 @@ if (isset($_GET["code"])) {
         <?php
     } else {
      
-      $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', 'active')";
+      $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime`,`status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', '$datetime', 'active')";
 
       $run = mysqli_query($conn, $insqry);
       if ($run) {

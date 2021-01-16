@@ -2,27 +2,65 @@
 /*logout btn css */
 .logout{
   position: absolute;
-  top: -11px;
-  padding: 3px 8px;
-  left: 18px;
-  font-weight: 500;
-  display: none;
-  width: 100px;
-  background: #fcfafb;
+    top: 10px;
+    padding: 4px 31px;
+    left: 0px;
+    font-weight: 500;
+    width: 144px;
+    background: #fcfafb;
+
 }
- #signin:hover .logout{
+#list{
+  display:  none;
+}
+#dashboardlink{
+  position: absolute;
+  width: 106%;
+  background-color: white;
+  text-align: center;
+  font-weight: 500;
+  margin: 0px 17px;
+  left: -17px;
+  top: -15px;
+  padding: -1px;
+  z-index: 23;
+}
+ #signin:hover #list {
 display: block;
 } 
-
+ 
+nav.main-menu ul.menu > li > #dashboardlink:before {
+content: none !important;
+}
 /*sign in msg correct/invalid*/
 .SigninMsg{
-   display: block;
-    /* display: inline; */
-    margin: 0;
-    padding: 0;
-    position: relative;
-    top: 5px;
-    left: 5px;
+  display: block; 
+  display: inline;
+  margin: 0;
+  padding: 0;
+  background: white;
+  /* border: 1px solid; */
+   
+  position: absolute;
+  text-align: center;
+  top: 9px;
+  border-radius: 28px;
+  left: 83%;
+  width: 35px;
+}
+.invalidMsg{
+  /* background-color: #fbfafa; */
+  padding: 0px;
+  margin: 0;
+}
+
+#label{
+  margin: 0;
+  position: absolute;
+  top: 13px;
+  background: white;
+  left: 22px;
+  width: 82px;
 }
 /* input in sign in */
  
@@ -31,31 +69,37 @@ button {
   background-color: #999;
   margin-top: 20px;
 }
-
+.input{
+  width: 100%;
+  height: 49px;
+  border: 1px solid #bbc7d4;
+}
 /* The snackbarlightlight - position it at the bottom and in the middle of the screen */
 #snackbarlight {
-    visibility: hidden;
-    min-width: 212px;
-    box-shadow: 1px 1px 1px 1px solid;
-    margin-left: -130px;
-    box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
-    -webkit-box-shadow: -1px 1px 7px 1px rgba(0,0,0,0.75);
-    -moz-box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
-    background-color: #2190ad;
-    color: #fff;
-    text-align: center;
-    border-radius: 4px;
-    padding: 7px;
-    position: fixed;
-    z-index: 1;
-     
-    left: 92%;
-    top: 22%;
-    height: 6vh;
-    bottom: 0px;
+  visibility: hidden;
+  transition-property: all .5s;
+  min-width:  auto;
+  box-shadow: 1px 1px 1px 1px solid;
+  margin-left: -130px;
+  box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -1px 1px 7px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
+  background-color: #2190ad;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 7px;
+  position: absolute;
+  z-index: 1;
+  left: 82%;
+  left: 78%;
+  height: 6vh;
+  top: 14%;
+  bottom: 0px;
+}
   
   /* 30px from the bottom */
-}
+
 
 /* Show the snackbarlight when clicking on a button (class added with JavaScript) */
 .show {
@@ -116,3 +160,218 @@ button {
     opacity: 0;
   }
 }
+ #verifyform , #forgetpass{
+  color: black;
+  width: 34%;
+  border: 1px solid;
+  border-radius: 6px;
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  transform: translate(-50%, -50%);
+  padding: 0px 0;
+  background: #d6e2ef;
+  height: 22vh;
+  z-index: 3;
+   box-shadow: 0px 0px 6px -1px; 
+  transition:all 0.5s;
+ }
+#closeicon{
+  float: right;
+  cursor: pointer;
+  padding: 3px 6px;
+}
+.resendDIV{
+  position: absolute;
+    top: 97%;
+    left: 47%;
+}
+.heading{
+  font-size: 1.5em;
+}
+.pcontent{
+  font-size:  1.3em;
+}
+ /*image upkpoad icon*/
+ input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  border: 0;
+}
+.custom-file-upload {
+  display: block;
+    padding: 3px 13px;
+    position: relative;
+    cursor: pointer;
+    height: 29px;
+    top: 164px;
+    left: -26px;
+}
+
+.uploadicon{
+  cursor: pointer;
+    /* margin: 0; */
+    transition : all 0.4s;
+    position: absolute;
+    left: 18px;
+}
+.uploadicon:hover{
+   
+  font-size:30px;
+  color : black;
+}
+#btn{
+  color: black;
+  border: 1px solid #bb9fac;
+  padding: 3px 15px;
+  width: 110px;
+  border-radius: 1px;
+  text-transform: capitalize;
+  margin: 2px 0;
+  background-color: #f0f4f7;
+  position: absolute;
+  top: 105%;
+  font-family: 'FontAwesome';
+  transition : all 0.6s;
+}
+#btn:hover{
+  box-shadow: 0 0.5em 0.5em -0.4em var(--dark);
+  transform: translateY(-0.25em);
+  color: white;
+  border-radius : 4px;
+  
+  letter-spacing :2px;
+  background-color: rgb(3 105 164);
+}
+.imgcss{
+  width: 100%;
+    height: 106px !important;
+}
+.position{
+  position: relative;
+    top: -37px;
+}
+ /*22222222222222222222 loader 22222222222222222222222222*/
+ .lds-ring {
+  display: inline-block;
+  position: absolute;
+  width: 98vw;
+  top: -30%;
+   
+  height: 122vh;
+  background: #e1e0e0b0;
+  left: -43%;
+  z-index: 1;
+}
+.lds-ring div {
+  box-sizing: border-box;
+    display: block;
+    position: absolute;
+    height: 164px;
+    z-index: 3;
+    left: 44%;
+    top: 33%;
+    width: 170px;
+    background: white;
+    margin: 8px;
+    border: 8px solid rgb(96, 149, 247);
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: rgb(86, 164, 236) transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*loader css*/
+#loader{
+  display:  none;
+}
+ 
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 480px) { 
+  #verifyform,#forgetpass{
+    width: 100%;
+    left: 50%;
+    height: 22vh;
+    top: 12%;
+  }
+ 
+#varifyformdiv {
+  position: relative;
+  top: -24px;
+}
+.faq {
+  margin-left: 0em;
+}
+.heading{
+  font-size: 1.5em;
+}
+.pcontent{
+  font-size: 1em;
+}
+.resendDIV{
+  position: absolute;
+    top: 97%;
+    left: 37%;
+}
+  .output_message{
+    display: none;
+  }
+
+  #snackbarlight {
+    left: 53%;
+  }
+  .heading3{
+    font-size: 2em;
+    text-align: center;
+  }
+  #dashboardlink{
+  padding: 5px 0;
+  width: 41%;
+  top: -11px;
+    
+  }
+  .logout{
+    padding: 10px 24px;
+  }
+  #btn{
+    padding: 3px 15px;
+    width: 110px;
+    position: relative;
+    left: 62%;
+    text-transform: capitalize;
+    margin: 2px 0;
+    
+  }
+  .uploadicon{
+    cursor: pointer;
+    /* margin: 0; */
+    top: 91%;
+    font-size: 36px;
+    position: absolute;
+    left: 7%;
+  }
+  .img-fluid{
+    border-radius: 194px;
+  }
+}
+

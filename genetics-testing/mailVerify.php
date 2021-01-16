@@ -1,23 +1,24 @@
 <?php include('includes/header.php');
 include 'connection.php';
-// 
- 
-if (isset($_POST['verify']) && $_GET['cid']) {  
-     $f_name = $_GET['fname'];
-     $email = $_GET['email'];
-     $cid = $_GET['cid'];
-    
-    $to_mail = "$email";
-    $subject = "Simple Email Test via PHP";
-    $body = "Hi ,$f_name click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
-    $headers = "From : maishainfotech123@gmail.com";
-     
-     if (mail($to_mail , $subject ,$body , $headers)) {
-         echo "success";
-     }else {
-           echo "failed " . $to_mail;
-     }
-  }
+
+$f_name = $_GET['fname'];
+$email = $_GET['email'];
+$cid = $_GET['cid'];
+
+$to_mail = "$email";
+$subject = "Simple Email Test via PHP";
+$body = "Hi ,$f_name click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
+$headers = "From : maishainfotech123@gmail.com";
+
+if (mail($to_mail, $subject, $body, $headers)) {
+    echo "success";
+}
+// checking that firstname is set or not /  
+if (isset($_SESSION['fname'])) {
+    $fname = $_SESSION['fname'];
+} else {
+    $fname = $_GET['fname'];
+}
 
 ?>
 
@@ -48,39 +49,42 @@ if (isset($_POST['verify']) && $_GET['cid']) {
                         <!-- section title -->
                         <div class="section-title text-center">
                             <div class="title-header">
-                                <h3 class="title text-capitalize " style="font-size:38px;">Please verify your Email</h3>
+                                <h3 class="title text-capitalize heading">Please verify your Email</h3>
                             </div>
-                            <div class="text-dark text-capitalize" style="font-size: 1.2em;"> Hi <?php echo  $_SESSION['f_name']; ?>, we have sent an account verification mail to your registered email id please click the link given on the mail in order to verify your account. </a></div>
+                            <div class="text-dark text-capitalize pcontent"> Hi <?php echo   $fname; ?>, we have sent an account verification mail to your registered email id please click the link given on the mail in order to verify your account. </a></div>
                         </div><!-- section title end -->
                     </div>
                     <div class="accordion">
                         <!-- Activate Button -->
-                       <form action="" method="post" onsubmit="return false">
-                        <div class="toggle ttm-style-classic ttm-toggle-title-bgcolor-grey ttm-control-right-true" style="position: absolute;top: 97%;left: 50%;">
-                        
-                           <input type="submit" value="Resend" name="verify" style="background: rgb(3, 105, 164);font-size: 15px;cursor: pointer;padding: 0 9px;" id="resend" onclick="emailverification()" > 
-                           <p style="position: relative; top: 7px;font-weight: bold; font-size:18px; text-align:center"><span id="min">0.</span><span id="demo">60</
-                        </div>
+                        <form action="" method="post" class="myform resendDIV">
+                            <div class="toggle ttm-style-classic ttm-toggle-title-bgcolor-grey ttm-control-right-true  ">
+
+                                <input type="submit" value="Resend" name="verify" style="background: rgb(3, 105, 164);font-size: 15px;cursor: pointer;padding: 0 9px;" id="resend" onclick="emailverification()">
+                                <p style="position: relative; top: 7px;font-weight: bold; font-size:18px; text-align:center">
+                                    <span id="min">0.</span>
+                                    <span id="demo">60</span>
+
+                            </div>
+
                         </form>
-                     
+                        <span class="output_message"></span>
                         <!-- Activate Button end -->
                     </div>
-                     
+
 
                 </div>
-                 
+
             </div>
         </div>
 
-    </section> 
+    </section>
 
 
 </div>
 <!--site-main end-->
-
 <script>
     function emailverification() {
-        var countDown = 60;
+        var countDown = 6;
         var clickable = document.getElementById('resend');
         var time = setInterval(function() {
             countDown--;
@@ -88,19 +92,20 @@ if (isset($_POST['verify']) && $_GET['cid']) {
 
             var timer = document.getElementById('demo');
             if (countDown => 0) {
-                timer.innerText =  countDown;
+                timer.innerText = countDown;
                 clickable.removeAttribute('onclick', 'emailverification()');
-                clickable.value = "Resend";
+                clickable.value = "Please wait..";
                 document.getElementById("resend").style.cursor = "not-allowed";
+                clickable.setAttribute('disabled', 'disabled');
                 document.getElementById("resend").style.backgroundColor = "#7eb3d2";
                 clickable.style.backgroundColor = "#7eb3d2";
-                 
+                min.innerText = "0.";
             }
             if (countDown == 0) {
-                
+
                 clearInterval(time);
                 timer.innerText = "0.00";
-             
+                clickable.removeAttribute('disabled', 'disabled');
                 clickable.setAttribute('onclick', 'emailverification()');
                 min.innerText = " ";
                 clickable.value = "Resend";
@@ -108,8 +113,8 @@ if (isset($_POST['verify']) && $_GET['cid']) {
                 document.getElementById("resend").style.cursor = "pointer";
                 document.getElementById("resend").style.backgroundColor = "#0369a4";
                 clickable.style.backgroundColor = "#0369a4";
-                
-                
+
+
             }
         }, 1000);
     }
@@ -118,3 +123,36 @@ if (isset($_POST['verify']) && $_GET['cid']) {
 <!--footer start-->
 <?php include('includes/footer.php')
 ?>
+<script>
+    $(document).ready(function() {
+        $('.myform').on('submit', function() {
+
+            let name = '<?php echo $_GET['fname']; ?>';
+            let email = '<?php echo $_GET['email']; ?>';
+            let cid = '<?php echo  $_GET['cid']; ?>';
+            console.log(name + " " + email + " " + cid);
+            if (name != "" && email != "" && cid != "") {
+                $.ajax({
+                    url: "sendmail.php",
+                    type: "POST",
+                    data: {
+                        name: name,
+                        email: email,
+                        cid: cid,
+                    },
+
+                    success: function(result) {
+                        if (result == 'success') {
+                            $('.output_message').text('Message Sent!');
+                        } else {
+                            $('.output_message').text('Error in Sending email! to ' + email);
+                        }
+                    }
+                });
+            } else {
+                alert('Please fill all the field !');
+            }
+            return false;
+        });
+    });
+</script>
