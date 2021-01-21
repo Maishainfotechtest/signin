@@ -5,14 +5,7 @@ $f_name = $_GET['fname'];
 $email = $_GET['email'];
 $cid = $_GET['cid'];
 
-$to_mail = "$email";
-$subject = "Simple Email Test via PHP";
-$body = "Hi ,$f_name click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
-$headers = "From : maishainfotech123@gmail.com";
 
-if (mail($to_mail, $subject, $body, $headers)) {
-    echo "success";
-}
 // checking that firstname is set or not /  
 if (isset($_SESSION['fname'])) {
     $fname = $_SESSION['fname'];
@@ -51,7 +44,8 @@ if (isset($_SESSION['fname'])) {
                             <div class="title-header">
                                 <h3 class="title text-capitalize heading">Please verify your Email</h3>
                             </div>
-                            <div class="text-dark text-capitalize pcontent"> Hi <?php echo   $fname; ?>, we have sent an account verification mail to your registered email id please click the link given on the mail in order to verify your account. </a></div>
+                            <div class="text-dark text-capitalize pcontent"> Hi <?php echo   $fname; ?>, we have sent an account verification mail to your registered email id please click the link given on the mail in order to verify your account. </a>
+                          </div>
                         </div><!-- section title end -->
                     </div>
                     <div class="accordion">
@@ -65,7 +59,7 @@ if (isset($_SESSION['fname'])) {
                                     <span id="demo">60</span>
 
                             </div>
-
+  <p id="alertmsg"></p>
                         </form>
                         <span class="output_message"></span>
                         <!-- Activate Button end -->
@@ -154,5 +148,32 @@ if (isset($_SESSION['fname'])) {
             }
             return false;
         });
+
+       
     });
 </script>
+<script>
+    $(document).ready(function ( ) {
+        
+    })
+       setInterval(function  () {
+        let email = '<?php echo $_GET['email']; ?>';
+            console.log(email);
+             $.ajax({
+                 url:"mailVerifiedOrNot.php",
+                 type : "POST",
+                 data : {email : email},
+                 success : function  (data) {
+                    if (data== 1) {
+                        console.log("verified");
+                         window.location.replace("http://localhost/genetics-testing/signin.php");
+                    } else{
+                        console.log("not-verified");
+                    }
+                 }
+             }) 
+       },5000)
+           
+         
+</script>
+ 

@@ -62,19 +62,21 @@ if (isset($_GET["code"])) {
       $_SESSION['username'] = $fbdata['f_name'];
       ?>
          <script>
-                window.location.replace("http://localhost/genetics-testing/");
+                window.location.replace("http://localhost/genetics-testing/dashboard.php");
             </script>
         <?php
     } else {
      
       $insqry = "INSERT INTO `users` ( `id` ,`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime`,`status`) VALUES ( NULL , '$CID', '$name', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', '$datetime', 'active')";
-
+     //inserting data in userimage table
+      $insertImage = "INSERT INTO `userimages` (`id`, `name`, `imgSrc`, `email`) VALUES (NULL, '$name', '', '$email')";
+      $imgrun = mysqli_query($conn,$insertImage);
       $run = mysqli_query($conn, $insqry);
       if ($run) {
         $_SESSION['username'] = $name;
 ?>
         <script>
-          window.location.replace("http://localhost/genetics-testing/");
+          window.location.replace("http://localhost/genetics-testing/dashboard.php");
         </script>
       <?php
 
@@ -165,6 +167,7 @@ if (isset($_GET["code"])) {
           <!-- ttm_single_image-wrapper -->
           <div class="ttm_single_image-wrapper mb-30"> <img class="img-fluid" src="images/dna.jpg" alt=""> </div>
         </div>
+        
         <div class="col-xl-6 col-lg-7 col-xs-12">
           <div class="pt-5 res-991-pt-0">
             <!-- section title -->

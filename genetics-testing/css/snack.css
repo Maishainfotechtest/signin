@@ -34,24 +34,25 @@ content: none !important;
 }
 /*sign in msg correct/invalid*/
 .SigninMsg{
-  display: block; 
+  display: block;
   display: inline;
+  background: inherit;
   margin: 0;
   padding: 0;
-  background: white;
   /* border: 1px solid; */
-   
   position: absolute;
   text-align: center;
-  top: 9px;
+  top: 14px;
   border-radius: 28px;
-  left: 83%;
+  left: 82%;
   width: 35px;
 }
 .invalidMsg{
-  /* background-color: #fbfafa; */
   padding: 0px;
   margin: 0;
+  font-size: 12px;
+  font-family: math;
+  position:  relative;
 }
 
 #label{
@@ -60,8 +61,10 @@ content: none !important;
   top: 13px;
   background: white;
   left: 22px;
-  width: 82px;
+  width:  120px;
 }
+
+ 
 /* input in sign in */
  
 button {
@@ -76,7 +79,7 @@ button {
 }
 /* The snackbarlightlight - position it at the bottom and in the middle of the screen */
 #snackbarlight {
-  visibility: hidden;
+  visibility:  hidden;
   transition-property: all .5s;
   min-width:  auto;
   box-shadow: 1px 1px 1px 1px solid;
@@ -94,7 +97,7 @@ button {
   left: 82%;
   left: 78%;
   height: 6vh;
-  top: 14%;
+  top: 37%;
   bottom: 0px;
 }
   
@@ -214,10 +217,12 @@ button {
 
 .uploadicon{
   cursor: pointer;
-    /* margin: 0; */
-    transition : all 0.4s;
-    position: absolute;
-    left: 18px;
+  transition : all 0.4s;
+  position: absolute;
+  left: -30px;
+  color: #0369a4;
+  left: 18px;
+  top: -15px;
 }
 .uploadicon:hover{
    
@@ -254,6 +259,18 @@ button {
 .position{
   position: relative;
     top: -37px;
+}
+
+.valEror{
+  position: absolute;
+  top: 100%;
+  left: 4%;
+}
+.valSuccess{
+  position: absolute;
+    top: 54%;
+    left: 90%;
+    background: inherit;
 }
  /*22222222222222222222 loader 22222222222222222222222222*/
  .lds-ring {
@@ -370,8 +387,6 @@ button {
     position: absolute;
     left: 7%;
   }
-  .img-fluid{
-    border-radius: 194px;
-  }
+  
 }
 

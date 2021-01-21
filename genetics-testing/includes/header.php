@@ -1,18 +1,31 @@
-<?php session_start();
+<?php
+ob_start();
+include 'connection.php';
+
+session_start();
+// sign in setting on login and logout
 if (isset($_SESSION['username'])) {
   $name =  $_SESSION['username'];
   $logclass =  "fa fa-sign-out";
-  $link = " ";
+  $dashClass = "fa fa-tachometer";
+  $link = "";
   $trilogo = "dropdown-toggle";
+  $none = "none";
   $input = "Log Out";
+  $profile = "";
+  $visible = "";
+  $dashname = "dashboard";
 } else {
   $name = "Sign in";
+  $visible = "visibility: hidden;";
   $logclass =  " ";
+  $dashClass = " ";
   $link = "signin.php";
+  $profile = "display:none;";
+  $dashname = " ";
   $trilogo = " ";
   $input = " ";
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +43,7 @@ if (isset($_SESSION['username'])) {
 
   <!-- favicon icon -->
   <link rel="shortcut icon" href="images\favicon.png">
+
 
   <!-- bootstrap -->
   <link rel="stylesheet" type="text/css" href="css\bootstrap.min.css">
@@ -71,11 +85,11 @@ if (isset($_SESSION['username'])) {
   <link rel="stylesheet" type="text/css" href="css\responsive.css">
   <link rel="stylesheet" type="text/css" href="css\bootstrap-datetimepicker.css">
   <link rel="stylesheet" href="css\snack.css">
-   
+
 
 
   <!--select2 search -->
- 
+
 </head>
 
 <body>
@@ -161,14 +175,15 @@ if (isset($_SESSION['username'])) {
                       <li> <a href="how-it-works.php">How it works</a></li>
                       <li> <a href="team.php">Team</a></li>
                       <li> <a href="shop.php" class="shop-menu">Shop</a></li>
-                      <li id="signin"><a class="<?php echo $trilogo; ?> text-capitalize " href="<?php echo $link; ?>"> <i class="fa fa-user"></i> <?php echo $name; ?></a>
-                        <ul class="">
-                          <li> <a class="logout " href="logout.php"><i class="<?php echo $logclass; ?>" aria-hidden="true"></i><?php echo $input ?></a></li>
+                      <li id="signin"><a class="<?php echo $trilogo; ?> text-capitalize " href="<?php echo $link; ?>" style="pointer-events: <?php echo $none; ?>;"> <img src="images\profile-icon-left.png" style="<?php echo $profile; ?> width: 21px;"> <?php echo $name; ?></a>
+                        <ul id="list" style="<?php echo $visible; ?>">
+                         <li>
+                            <a class="dashboard text-capitalize" id="dashboardlink" href="dashboard.php"> <img src="images\dashboard-icon.png" class="img-fluid" style="width: 18px;margin: 0px 5px;"><?php echo $dashname; ?></a>
+                          </li>
+                          <li> <a class="logout " href="logout.php"><img src="images/logout-icon.png" alt="" style="width: 18px;margin: 0 -2px;">&nbsp; <?php echo $input ?></a>
+                          </li>
                         </ul>
-
                       </li>
-
-
                     </ul>
                   </nav>
                   <div class="header_extra d-flex flex-row align-items-center justify-content-end">

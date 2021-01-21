@@ -2,12 +2,8 @@
 
 include('includes/header.php');
 
-//Facebook – Youturn Genetics 
-//ID- 9310320173
-//Password- gaurav@0011
 
 //login with google 
-
 include 'config.php';
 if (isset($_GET["code"])) {
 
@@ -75,9 +71,50 @@ if (isset($_GET["code"])) {
 }
 //login to account
 $msg = " ";
+
+if (isset($_POST['press'])) {
+
+    $emailCheck =  $_SESSION['emailToVerify'];
+
+    
+
+    $sql = " select * from `users` where `email` = '$emailCheck'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $userVerifyname = $row['f_name'];
+    $cid = $row['cid'];
+
+
+    $subject = "Simple Email Test via PHP";
+    $body = "Hi ,$userVerifyname click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
+    $headers = "From : maishainfotech123@gmail.com";
+
+    if ( 4>2) {  
+        header("location:mailVerify.php?fname=$userVerifyname&cid=$cid&email=$emailCheck");
+        
+    }else{
+        echo "failed";
+    }
+}
 if (isset($_POST['login'])) {
     $emailCheck = $_POST['email_verify'];
     $passCheck = $_POST['password_check'];
+    $_SESSION['emailToVerify'] = $emailCheck;
+
+    $cookiemail = "";
+    $cookiepass = "";
+
+    if (!empty($_POST["check"])) {
+        setcookie("useremail", $emailCheck, time() + 31536000);
+        setcookie("password", $passCheck, time() + 31536000);
+        setcookie("checked", "checked", time() + 31536000);
+    } else {
+        setcookie("useremail", "");
+        setcookie("password", "");
+        setcookie("checked", "");
+    }
+
+
 
     $sql = " select * from `users` where `email` = '$emailCheck' and `password` = '$passCheck' ";
     $result = mysqli_query($conn, $sql);
@@ -88,12 +125,15 @@ if (isset($_POST['login'])) {
 
     $count = mysqli_num_rows($result);
 
+
+
     // If result matched $myusername and $mypassword, table row must be 1 row
 
     if ($count == 1 && $verify == 'yes') {
         $_SESSION['username'] =  $username;
         $_SESSION['user_email'] = $emailCheck;
-        ?>
+
+    ?>
 
         <script>
             window.location.replace("http://localhost/genetics-testing/dashboard.php");
@@ -102,22 +142,29 @@ if (isset($_POST['login'])) {
 
     }
     if ($count == 1 && $verify == 'no') {
-        $_SESSION['nonverified'] = $username; ?>
+        $_SESSION['nonverified'] = $username;
+
+
+    ?>
+
 
         <form action="" method="post" id="verifyform">
-            <div class="  " style="background-color: #0369a4!important">
+            <div class="" style="background-color: #0369a4!important">
                 <p class="ml-2 p-0 text-white" style="font-size: 18px;padding: 5px 0 !important;">Youturn Genetics <span> <i class="fa fa-times-circle" id="closeicon" aria-hidden="true"></i></span></p>
             </div>
             <p style="font-weight: 600;font-size: 15px;padding: 0px 15px;"> Your Email is Not Verified. Do you Want to verify your Email? </p>
             <div id="varifyformdiv" class="d-flex justify-content-end">
-                <a href="mailVerify.php?cid=<?php echo $cid; ?>&email=<?php echo $emailCheck; ?>&fname=<?php echo $username; ?>" class=" " style="border-radius: 1px;padding: 1px 7px; height:27px; color: white;background-color: #0369a4; border-color: #0369a4; ">Yes</a>
+
+                <input type="submit" value="Yes" name="press" style="border-radius: 1px;padding: 1px 7px; height:27px; color: white;background-color: #0369a4; border-color: #0369a4; ">
                 <p class="  btn-danger mt-0 ml-2 mr-3" style="border-radius: 1px; padding: 1px 12px; cursor:pointer" id="close" onclick="close()">No</p>
             </div>
 
         </form>
 
     <?php } else {
-        $msg = " invalid email id or password  " . mysqli_error($conn);
+
+
+        $msg = " *invalid email  or password  ";
     }
 }
 
@@ -182,18 +229,20 @@ if (isset($_GET['code'])) {
         $_SESSION['username'] = $fbdata['f_name'];
     ?>
         <script>
-            window.location.replace("http://localhost/genetics-testing/");
+            window.location.replace("http://localhost/genetics-testing/dashboard.php");
         </script>
         <?php
     } else {
         $insqry = "INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime`, `status`) VALUES (NULL, '$CID', '$fname', '$lname', '$email', 'yes', NULL, NULL, NULL, NULL, NULL, '$joindate', '$jointime', '$datetime', 'active')";
 
+        $insertImage = "INSERT INTO `userimages` (`id`, `name`, `imgSrc`, `email`) VALUES (NULL, '$fname', '', '$email')";
+        $imgrun = mysqli_query($conn, $insertImage);
         $run = mysqli_query($conn, $insqry);
         if ($run) {
             $_SESSION['username'] = $fname;
         ?>
             <script>
-                window.location.replace("http://localhost/genetics-testing/");
+                window.location.replace("http://localhost/genetics-testing/dashboard.php");
             </script>
         <?php
         } else { ?>
@@ -237,18 +286,25 @@ if (isset($_GET['code'])) {
                                 <form action="" method="post" id="login_form" name="">
 
                                     <div class="form-group">
-                                        <input type="text" name="email_verify" class="form-control" placeholder="Email">
-                                        <p id="login_msg " class="text-capitalize text-danger"><?php echo $msg; ?></p>
+                                        <input type="text" name="email_verify" value="<?php if (isset($_COOKIE["useremail"])) {
+                                                                                            echo $_COOKIE["useremail"];
+                                                                                        } ?>" class="form-control" placeholder="Email">
+                                        <p id="login_msg " style="font-size: 12px;" class="text-capitalize text-danger"><?php echo $msg; ?></p>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" name="password_check" class="form-control" placeholder="Password">
+                                        <input type="password" name="password_check" value="<?php if (isset($_COOKIE["password"])) {
+                                                                                                echo $_COOKIE["password"];
+                                                                                            } ?>" class="form-control" placeholder="Password">
 
                                         <a href="forgetPassword.php" style="color:#012b72; font-size:13px; float:right;">Forgot your password?</a>
 
                                     </div>
                                     <div class="row">
                                         <div class="form-group">
-                                            <label style="font-weight:400; float:none; text-align:left;" class="sign_up"><input type="checkbox" name="">Remember me</label>
+                                            <label style="font-weight:400; float:none; text-align:left;" class="sign_up">
+                                                <input type="checkbox" name="check" <?php if (isset($_COOKIE["checked"])) {
+                                                                                        echo $_COOKIE["checked"];
+                                                                                    } ?>>Remember me</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -307,8 +363,8 @@ if (isset($_GET['code'])) {
                                         </div>
 
                                         <div class="form-group col-sm-6">
-                                            
-                                            <select name="country" id="country"   class="form-control input" oninput="counVal()">
+
+                                            <select name="country" id="country" class="form-control input selectpicker" data-live-search="true" oninput="counVal()">
                                                 <option>select country</option>
                                                 <!-- Adding Country Name and Country code -->
                                                 <?php
@@ -320,9 +376,9 @@ if (isset($_GET['code'])) {
                                             </select>
                                             <p class="text-danger invalidMsg text-capitalize" id="countryError"></p>
                                             <p class="text-success SigninMsg  text-capitalize" id="countrySuccess"></p>
-                                             
 
-                                            
+
+
                                         </div>
 
                                     </div>
@@ -390,7 +446,7 @@ if (isset($_GET['code'])) {
     <!-- Use a button to open the snackbar -->
 
     <!-- The actual snackbar -->
-    <p id="snackbarlight" value="" class=" text-capitalize">Some text some message..</p>
+    <p id="snackbarlight" class=" text-capitalize">Some text some message..</p>
 
 </section>
 
@@ -425,7 +481,7 @@ if (isset($_POST['submit'])) {
                 // After 3 seconds, remove the show class from DIV
                 setTimeout(function() {
                     x.className = x.className.replace("show", "");
-                }, 5000);
+                }, 6000);
             }
             mySnackBar();
             var formid = document.getElementById('registration_form');
@@ -437,14 +493,25 @@ if (isset($_POST['submit'])) {
         // inserting data in users table 
         $insqry = "INSERT INTO `users` (`cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime` , `status`) VALUES ('$CID ', '$f_name', '$l_name', '$email', 'no', '$country', '$phone', 'no', '$DOB', '$password', '$joindate', '$jointime', '$datetime' ,'active')";
 
+        $insertImage = "INSERT INTO `userimages` (`id`, `name`, `imgSrc`, `email`) VALUES (NULL, '$f_name', '', '$email')";
+        $imgrun = mysqli_query($conn, $insertImage);
         $run = mysqli_query($conn, $insqry);
-        if ($run) {
+        if ($run && $imgrun) {
             $_SESSION['email'] = $email;
             $_SESSION['cid'] = $CID;
             $_SESSION['f_name'] = $f_name;
+
+            $to_mail = "$email";
+            $subject = "Simple Email Test via PHP";
+            $body = "Hi ,$f_name click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
+            $headers = "From : maishainfotech123@gmail.com";
+
+            if (mail($to_mail, $subject, $body, $headers)) {
+                echo "success";
+            }
         ?>
             <script>
-                function mySnackBar() {
+                /*function mySnackBar() {
                     // Get the snackbar DIV
                     var x = document.getElementById("snackbarlight")
                     // Add the "show" class to DIV
@@ -459,8 +526,8 @@ if (isset($_POST['submit'])) {
                 var formid = document.getElementById('registration_form');
                 var snackbar = document.getElementById('snackbarlight');
                 snackbar.innerText = "Registration completed";
-                btn.setAttribute('disabled', 'disabled');
-                btn.innerText = "your registration is completed";
+                btn.setAttribute('disabled', 'disabled');*/
+
                 window.location.replace("http://localhost/genetics-testing/mailVerify.php?cid=<?php echo $CID; ?>&email=<?php echo $email; ?>&fname=<?php echo $f_name; ?>");
             </script>
         <?php } else {  ?>
@@ -473,7 +540,7 @@ if (isset($_POST['submit'])) {
                     // After 3 seconds, remove the show class from DIV
                     setTimeout(function() {
                         x.className = x.className.replace("show", "");
-                    }, 3000);
+                    }, 6000);
                 }
                 mySnackBar();
                 var formid = document.getElementById('registration_form');
@@ -502,5 +569,53 @@ if (isset($_POST['submit'])) {
                 "display": "none"
             });
         });
+    })
+</script>
+<script>
+    $(document).ready(function() {
+
+        $('#email').on("keyup", function() {
+            var email = document.getElementById('email').value;
+            console.log(email);
+
+            $.ajax({
+                url: "checkmail.php",
+                type: "POST",
+                data: {
+                    email: email
+                },
+
+                success: function(data) {
+                    $('#emailError ').text(data);
+                    var email = document.getElementById('email').value;
+                    var validmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    var msg = document.getElementById('emailError').innerText;
+                    console.log(msg);
+                    var btn = document.getElementById('submitRejis');
+                    var emailSuccess = document.getElementById('emailsucess');
+                    emailSuccess.innerText = " ";
+                    document.getElementById("submitRejis").style.cursor = "not-allowed";
+                    btn.setAttribute('disabled', 'disabled');
+
+                    var validmail = email.match(validmail);
+                    if (msg === "" && validmail) {
+                        var btn = document.getElementById('submitRejis');
+                        document.getElementById("submitRejis").style.cursor = "pointer";
+                        emailSuccess.innerText = " ✔";
+                        btn.removeAttribute('disabled', 'disabled');
+                    } else if (!validmail) {
+                        var emailError = document.getElementById('emailError');
+                        emailSuccess.innerText = " ";
+                        emailError.innerText = "*invalid Mail";
+                        document.getElementById("submitRejis").style.cursor = "not-allowed";
+                        btn.setAttribute('disabled', 'disabled');
+                    }
+
+                }
+            })
+
+        })
+
+
     })
 </script>

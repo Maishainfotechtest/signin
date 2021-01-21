@@ -1,11 +1,6 @@
  <?php 
  session_start();
 include('config.php');
-
- 
-
- 
-
 //Destroy entire session data.
 session_destroy();
 

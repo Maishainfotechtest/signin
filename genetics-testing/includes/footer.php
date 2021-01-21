@@ -162,7 +162,7 @@
 <!-- Javascript form Validation -->
 <script src="js\validation.js"></script>
 <!-- Javascript -->
-
+<script src="js\ajax.js"></script>
 <script src="js\jquery.min.js"></script>
 <script src="js\bootstrap.min.js"></script>
 <script src="js\tether.min.js"></script>
@@ -209,6 +209,8 @@
   $(function() {
     $("#myModal").modal();
   });
+
+ 
 </script>
 
 
@@ -250,5 +252,7 @@
 </script>
  
 </body>
-
+ 
+ 
+   
 </html>

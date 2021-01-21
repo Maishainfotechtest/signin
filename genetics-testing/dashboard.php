@@ -139,46 +139,7 @@ if (isset($_POST['upload'])) {
 ?>
 
 <?php
-// Check if form was submitted  update image  
-if (isset($_POST['change'])) {
-  $name = $_SESSION['name'];
-  $email = $_SESSION['email'];
-  $filename  = $_FILES['image']["name"];
-  //for using filename in javascript
-  $_SESSION['filename'] =   $_FILES['image']["name"];
-  $tempname = $_FILES['image']["tmp_name"];
-  $folderpath = "./images/usersImage/" . $filename;
-
-  //image details for validation
-  $fileinfo = getimagesize($_FILES["image"]["tmp_name"]);
-  $width = $fileinfo[0];
-  $height = $fileinfo[1];
-  //array for image extension validation
-  $allowed_image_extension = array("png", "jpg", "jpeg");
-  //print_r($fileinfo);
-  //print_r($_FILES["image"]);
-  $folderpath = "./images/usersImage/" . $filename;
-  $fileupload = move_uploaded_file($tempname, $folderpath);
-  // Get image file extension
-  $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-  if (!in_array($file_extension, $allowed_image_extension)) {
-    $response =  "invalid image extension. Only PNG and JPEG are allowed.";
-  }
-  //get image size forvalidation 
-  else if (($_FILES["image"]["size"] > 200000)) {
-    $response =  "Image size exceeds 200kb";
-  } else {
-    $updateimage = "UPDATE `userimages` SET `imgSrc` = '$folderpath' WHERE `userimages`.`email` = '$email'";
-    $runQuery = mysqli_query($conn, $updateimage);
-    if ($runQuery) { ?>
-      <script>
-        window.location.replace("http://localhost/genetics-testing/dashboard.php");
-      </script>
-<?php } else {
-      echo "image not  updated";
-    }
-  }
-}
+ 
 ?>
 
 <!-- page-title -->
@@ -227,11 +188,18 @@ if (isset($_POST['change'])) {
                   </div>
                   <div class="row">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-12 position">
-                      <form action="dashboard.php" method="post" name="form_name" enctype="multipart/form-data">
+                     
+                      <form action="dashboard.php" id="submit-group"    >
                         <label for="file-upload" class="custom-file-upload"> <i for class="fa fa-2x fa-pencil-square-o  uploadicon" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="<?php echo $AddUpdate; ?>"></i>
                           <p style="width: 247px;margin: 4px 36px;" class="text-capitalize text-success font-weight" id="fileMsg"> </p>
                         </label>
-                        <center><input type="file" name="image" id="file-upload" required><img src="<?php echo $imageAddress; ?>" class="img-fluid  " style="border-radius:195px;"></center>
+                        <center><input type="file" name="file" id="file-upload" required>
+                          <div id="default">
+                            <img src="<?php echo $imageAddress; ?>" class="img-fluid  " style="border-radius: 61px; height: 111px; width: 114px;">
+                          </div>
+                          <div id="image_preview">
+                          </div>
+                        </center>
 
                       </form>
 
@@ -254,15 +222,15 @@ if (isset($_POST['change'])) {
             <div class="content-inner  " id="personalInfo">
               <div class="heading">Personal Information</div>
 
-              <form action="" method="post" id="">
+              <form action="" method="post">
                 <div class="row">
                   <div class="form-group col-sm-6">
-                    <label>First Name</label><span class="text-danger" id="prof_f_nameError"> </span> &nbsp;<span class="text-success" id="prof_f_name_sucess"> </span>
+                    <label>First Name</label><span class="text-danger valEror" id="prof_f_nameError"> </span> &nbsp;<span class="  valSuccess text-success" id="prof_f_name_sucess"> </span>
                     <input type="text" class="text-dark m-0 p-2" name="first_name" id="prof_f_name" value="<?php echo $userData['f_name']; ?>" class="form-control text-capitalize" placeholder="" onkeyup="ProfileFirstNameValidation()" required>
                   </div>
                   <!--********--->
                   <div class="form-group col-sm-6">
-                    <label>Last Name</label><span class="text-danger" id="Profile_l_nameError"> </span> &nbsp;<span class="text-success" id="Profile_l_name_sucess"> </span>
+                    <label>Last Name</label><span class="text-danger valEror" id="Profile_l_nameError"> </span> &nbsp;<span class="text-success valSuccess " id="Profile_l_name_sucess"> </span>
                     <input type="text" class="text-dark m-0 p-2" name="last_name" id="Profile_l_name" value="<?php echo $userData['l_name']; ?>" class="form-control text-capitalize" placeholder="" onkeyup="ProfileLastNameValidation()" required>
                   </div>
                   <div class="form-group col-sm-6">
@@ -466,34 +434,39 @@ if (isset($_POST['change'])) {
       $('#loader').css('display', 'block');
       setTimeout(function() {
         $('#loader').css('display', 'none');
-      }, 1000);
+      }, 500);
+      
+      var fileData = new FormData($("#submit-group")[0]);
+      console.log(fileData);
+      $.ajax({
+        url: "insertimage.php",
+        type: "POST",
+        data: fileData,
+        contentType: false,
+        processData: false,
+        success: function(data) {
 
-       var attrvalue = $(this).attr("name");
-        $.ajax({
-          url : "insertimage.php",
-          method : "POST",
-          data : {attrvalue : attrvalue},
-          success : function(res){
-          $('#filemsg').html(res);
-          console.log(attrvalue);
-          }
-        })
+          $('#default').hide();
+          $('#image_preview').html(data);
+          $('#fileMsg').text(' ');
+        }
+      });
     });
 
 
-   /* $("#country").change(function  () {
-          var cid =  $("#country").find(':selected').attr('key');
-          console.log(cid);
-          $.ajax({
-              url : "state.php",
-              method : "POST",
-              data : {cid : cid},
-              success : function  (res) {
-                  $('#state').html(res);
-              }
-          })
-      })*/
-  }); 
+    /* $("#country").change(function  () {
+           var cid =  $("#country").find(':selected').attr('key');
+           console.log(cid);
+           $.ajax({
+               url : "state.php",
+               method : "POST",
+               data : {cid : cid},
+               success : function  (res) {
+                   $('#state').html(res);
+               }
+           })
+       })*/
+  });
 </script>
 <script>
   $(document).ready(function() {
@@ -511,3 +484,4 @@ if (isset($_POST['change'])) {
     })
   })
 </script>
+ 
