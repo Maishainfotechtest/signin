@@ -147,6 +147,7 @@ if ($userImage['imgSrc'] == "") {
             </div>
             <!-- tab1 end -->
             <div class="content-inner  " id="personalInfo">
+            <div id="returnMSG" class="text-success"></div>
               <div class="heading">Personal Information</div>
               <!-- OTP FORM --->
               <div id="otp">
@@ -176,7 +177,7 @@ if ($userImage['imgSrc'] == "") {
                   </div>
                   <div class="form-group col-sm-6">
                     <label>Email</label>
-                    <input type="email" class="  m-0 p-2" name="email" id="password" disabled="disabled" style="cursor: not-allowed;" value="<?php echo $userData['email']; ?>" class="form-control " placeholder="">
+                    <input type="email" class="  m-0 p-2" name="email" id="email" disabled="disabled" style="cursor: not-allowed;" value="<?php echo $userData['email']; ?>" class="form-control " placeholder="">
                   </div>
                   <div class="form-group col-sm-6">
                     <label>Contact No</label><span class="text-danger" id="ProfilephoneError"> </span> &nbsp;<span class=" text-success" id="Profilephonesuccess"> </span>
@@ -216,7 +217,7 @@ if ($userImage['imgSrc'] == "") {
                     <textarea name="address" id="address" class="form-control text-capitalize" style="min-height:65px;" placeholder="Enter Address" required><?php echo $userData['address']; ?></textarea>
                   </div>
                   <div class="form-group col-sm-12">
-                    <button type=" " name="update" id="updateProf" class="btn2">Update</button>
+                    <button type="button" id="updateProf" class="btn2">Update</button>
                   </div>
                 </div>
               </form>
@@ -425,7 +426,30 @@ if ($userImage['imgSrc'] == "") {
     $('#updateProf').on("click",function (){
       var fname = $('#prof_f_name').val();
       var lname = $('#Profile_l_name').val();
-      var email = $('').val();
+      var contact = $('#Profliephone').val();
+      var email = $('#email').val();
+      var country = $('#country').val();
+      var state = $('#state').val();
+      var city = $('#city').val();
+      var address = $('#address').val();
+      
+      $.ajax({
+        url : "udateDashBoardData.php",
+        type : "POST",
+        data : {
+          fname : fname,
+          lname : lname,
+          contact : contact,
+          email: email,
+          country : country,
+          state : state,
+          city : city,
+          address : address
+        },
+        success : function(data){
+          $('#returnMSG').html(data);
+        }
+      })
     })
   })
 </script>
