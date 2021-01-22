@@ -21,8 +21,8 @@ function FirstNameValidation() {
       document.getElementById("submitRejis").style.cursor = "not-allowed";
       firstnameSucess.innerText = " ";
     }
-    
-    
+
+
     else {
       firstNameErorr.innerText = " ";
       firstnameSucess.innerText = "✔";
@@ -52,8 +52,8 @@ function LastNameValidation() {
     lastnamesuccess.innerText = " ";
 
   }
-   
-   
+
+
 
   else {
     lastNameErorr.innerText = " ";
@@ -62,41 +62,7 @@ function LastNameValidation() {
     document.getElementById("submitRejis").style.cursor = "pointer";
   }
 }
-//Email Validation 
-function emailVal() {
-  var email = document.getElementById('email').value;
-  var emailError = document.getElementById('emailError');
-  var emailSuccess = document.getElementById('emailsucess');
-  var emailCount = email.length;
-  var validmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  if (emailCount == "") {
-    emailError.innerText = "**Please Enter your Email ID";
-    emailSuccess.innerText = " ";
-  }
-  else {
-    if (emailCount < 5) {
-      emailError.innerText = "**Email Length should be Greater then 5";
-      document.getElementById("submitRejis").style.cursor = "not-allowed";
-      btn.setAttribute('disabled', 'disabled');
-      emailSuccess.innerText = " ";
-    }
-    else if (!email.match(validmail)) {
-      emailError.innerText = "**Invalid email ";
-      document.getElementById("submitRejis").style.cursor = "not-allowed";
-      emailSuccess.innerText = " ";
-      btn.setAttribute('disabled', 'disabled');
-    }
-    
-    else {
-      emailError.innerText = " ";
-      emailSuccess.innerText = " ✔";
-      btn.removeAttribute('disabled', 'disabled');
-      document.getElementById("submitRejis").style.cursor = " pointer";
-    }
-  }
-
-
-}
+ 
 //country Validation
 function counVal() {
   var conCode = document.getElementById('country').value;
@@ -162,10 +128,10 @@ function dateVal() {
   var date = document.getElementById('date').value;
   var datesuccess = document.getElementById('dateSuccess');
 
-  
+
   if (document.getElementById('date').oninput) {
-     document.getElementById('label').style.display = "none";
-     datesuccess.innerText = "✔";
+    document.getElementById('label').style.display = "none";
+    datesuccess.innerText = "✔";
   }
 }
 //password Validation
@@ -271,7 +237,7 @@ function resetpassVal() {
       btn.removeAttribute('disabled', 'disabled');
       cpass.removeAttribute('disabled', 'disabled');
       document.getElementById("submit").style.cursor = "pointer";
-      passCorr.innerText = "  ✔";
+      passCorr.innerText = "✔";
     }
 
   }
@@ -335,8 +301,8 @@ function ProfileFirstNameValidation() {
       document.getElementById("updateProf").style.cursor = "not-allowed";
       ProfilefirstnameSucess.innerText = " ";
     }
-    
-     
+
+
     else {
       ProfilefirstNameErorr.innerText = " ";
       ProfilefirstnameSucess.innerText = "✔";
@@ -368,8 +334,6 @@ function ProfileLastNameValidation() {
     ProfileLastNamesuccess.innerText = " ";
 
   }
-  
-
   else {
     ProfileLastNameErorr.innerText = " ";
     updatebtn.removeAttribute('disabled', 'disabled');
@@ -409,10 +373,10 @@ function ProfilephoneVal() {
   }
 }
 
- 
- 
 
-  
+
+
+
 
 
 

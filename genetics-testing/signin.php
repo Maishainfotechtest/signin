@@ -1,8 +1,9 @@
 ﻿<?php
-
 include('includes/header.php');
 
-
+if (isset($_SESSION['username'])) {
+    header('location:dashboard.php');
+}
 //login with google 
 include 'config.php';
 if (isset($_GET["code"])) {
@@ -75,9 +76,6 @@ $msg = " ";
 if (isset($_POST['press'])) {
 
     $emailCheck =  $_SESSION['emailToVerify'];
-
-    
-
     $sql = " select * from `users` where `email` = '$emailCheck'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -89,7 +87,7 @@ if (isset($_POST['press'])) {
     $body = "Hi ,$userVerifyname click on the link to activate your account : http://localhost/genetics-testing/activate.php?cid=$cid";
     $headers = "From : maishainfotech123@gmail.com";
 
-    if ( 4>2) {  
+    if (!mail($emailCheck,$subject,$body,$headers)) {  
         header("location:mailVerify.php?fname=$userVerifyname&cid=$cid&email=$emailCheck");
         
     }else{
@@ -286,9 +284,7 @@ if (isset($_GET['code'])) {
                                 <form action="" method="post" id="login_form" name="">
 
                                     <div class="form-group">
-                                        <input type="text" name="email_verify" value="<?php if (isset($_COOKIE["useremail"])) {
-                                                                                            echo $_COOKIE["useremail"];
-                                                                                        } ?>" class="form-control" placeholder="Email">
+                                        <input type="text" name="email_verify" value="<?php if (isset($_COOKIE["useremail"])) { echo $_COOKIE["useremail"];} ?>" class="form-control" placeholder="Email">
                                         <p id="login_msg " style="font-size: 12px;" class="text-capitalize text-danger"><?php echo $msg; ?></p>
                                     </div>
                                     <div class="form-group">

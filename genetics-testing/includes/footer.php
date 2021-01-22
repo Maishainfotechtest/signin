@@ -1,3 +1,22 @@
+<?php 
+include "connection.php";
+// sign in setting on login and logout
+if (isset($_SESSION['username'])) {
+  $name =  $_SESSION['username'];
+  $email =  $_SESSION['user_email'];
+
+  $selectQuery = "select * from users where email = '$email' ";
+  $runQuery = mysqli_query($conn,$selectQuery);
+  $dataArray = mysqli_fetch_assoc($runQuery);
+  $name=$dataArray['f_name'];
+  $email=$dataArray['email'];
+  $mobile=$dataArray['mobile'];
+}else {
+  $name= "";
+  $email= "";
+  $mobile= "";
+  }
+?>
 <!--footer start-->
 <footer class="footer widget-footer clearfix">
   <div class="third-footer">
@@ -124,11 +143,23 @@
 <div id="deployform" class="deployform bounce">
   <i class="fa fa-envelope icon" aria-hidden="true"></i>
 
-  <form class="form">
+  <form class="form" id="formSub">
+    <!-- loader --->
+   
     <i class="fa fa-times cancel" aria-hidden="true"></i>
-    <input type="text" placeholder="Name" required />
-    <input type="text" placeholder="Phone" required />
-    <input type="email" placeholder="Email" required />
+    <input type="text" placeholder="Name" value="<?php echo $name; ?>" class=" " id="nameval" required />
+    
+    <input type="text" placeholder="Phone" class=" " value="<?php echo $mobile; ?>" id="phonenumberval" required />
+   
+    <input type="email" placeholder="Email" class=" " value="<?php echo $email; ?>" id="emailval" required />
+    
+    <div class="ldss-ring m-0 togglemsg  p-0" id="loaderPro">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <input type="text" placeholder="subject" class=" " id="subjectval" required />
     <!--  <select name="service" id="service" value="">
         <option value="" selected="">Services</option>
         <option value="">The Salt Cave</option>
@@ -139,9 +170,10 @@
         <option value="">Ionic Foot Detoxification</option>
         <option value="">Full Spectrum IR Sauna</option>       
   </select> -->
-    <textarea rows="3" placeholder="Your message" required></textarea>
-    <button>Send</button>
+    <textarea rows="3" placeholder="Your message" id="messageval" required></textarea>
+    <button type="button" id="submit">Send</button>
   </form>
+  <div id="feedback" style="font-size: 12px; margin: 8px 0;"></div>
 </div>
 <!--/form-->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
@@ -157,6 +189,40 @@
     $("#register").slideToggle();
     $("#login").slideToggle(1000);
   });
+</script>
+<script>
+  $(document).ready(function  () {
+    $('#submit').on("click", function() {
+            var name = document.getElementById('nameval').value;
+            var email = document.getElementById('emailval').value;
+            var phone = document.getElementById('phonenumberval').value;
+            var subject = document.getElementById('subjectval').value;
+            var message = document.getElementById('messageval').value;
+            $('#loaderPro').css('display', 'block');
+            setTimeout(function() {
+                $('#loaderPro').css('display', 'none');
+            }, 500);
+
+            $.ajax({
+                url: "feedback.php",
+                type: "POST",
+                data: {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    subject: subject,
+                    message: message
+                },
+                success: function(data) {
+                    $('#feedback').html(data);
+                    $('#formSub')[0].reset();
+                    $('textarea').val("");
+
+                }
+            })
+
+        })
+  })
 </script>
 
 <!-- Javascript form Validation -->
@@ -209,8 +275,6 @@
   $(function() {
     $("#myModal").modal();
   });
-
- 
 </script>
 
 
@@ -250,9 +314,9 @@
     });
   });
 </script>
- 
+
 </body>
- 
- 
-   
+
+
+
 </html>

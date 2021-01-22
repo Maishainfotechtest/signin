@@ -55,15 +55,15 @@ if (isset($_POST['reset'])) {
 
                                 <div class="form-group">
                                     <input type="password" name="pass" id="reset_password" value="" class="form-control inputsignin" placeholder="Enter Your Password" onkeyup="resetpassVal()" required>
-                                    <p class="text-danger  SigninMsg text-capitalize" id="reset_passError"></p>
+                                    <p class="text-danger   forgetPassMsg text-capitalize" id="reset_passError"></p>
                                     <p class="text-success SigninMsg text-capitalize" id="reset_passcorrect"></p>
                                     
                                 </div>
                                  
                                 <div class="form-group">
                                     <input type="password" name="cpass" id="confirm_password" value="" class="form-control inputsignin" placeholder="Enter Your Password" onkeyup="resetcpassVal()" required>
-                                    <p class="text-danger  SigninMsg text-capitalize" id="reset_CpassError"></p>
-                                    <p class="text-success SigninMsg text-capitalize" id="reset_Cpasscorrect"></p>
+                                    <p class="text-danger   forgetPassMsg text-capitalize" id="reset_CpassError"></p>
+                                    <p class="text-success   text-capitalize" id="reset_Cpasscorrect" style="position: absolute;top: 80px; left:85%"></p>
                                     
                                 </div>
                                 <div class="form-group">

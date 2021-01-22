@@ -10,7 +10,7 @@ if (!empty($email)) {
     if ($rows>0) {
         echo  "**email already exist";
     }else{
-        echo "invalid";
+     
     }
      
 }

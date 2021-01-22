@@ -45,7 +45,7 @@ if (isset($_SESSION['fname'])) {
                                 <h3 class="title text-capitalize heading">Please verify your Email</h3>
                             </div>
                             <div class="text-dark text-capitalize pcontent"> Hi <?php echo   $fname; ?>, we have sent an account verification mail to your registered email id please click the link given on the mail in order to verify your account. </a>
-                          </div>
+                            </div>
                         </div><!-- section title end -->
                     </div>
                     <div class="accordion">
@@ -59,7 +59,7 @@ if (isset($_SESSION['fname'])) {
                                     <span id="demo">60</span>
 
                             </div>
-  <p id="alertmsg"></p>
+                            <p id="alertmsg"></p>
                         </form>
                         <span class="output_message"></span>
                         <!-- Activate Button end -->
@@ -136,6 +136,7 @@ if (isset($_SESSION['fname'])) {
                     },
 
                     success: function(result) {
+                         
                         if (result == 'success') {
                             $('.output_message').text('Message Sent!');
                         } else {
@@ -149,31 +150,30 @@ if (isset($_SESSION['fname'])) {
             return false;
         });
 
-       
+
     });
 </script>
 <script>
-    $(document).ready(function ( ) {
-        
+    $(document).ready(function() {
+
     })
-       setInterval(function  () {
+    setInterval(function() {
         let email = '<?php echo $_GET['email']; ?>';
-            console.log(email);
-             $.ajax({
-                 url:"mailVerifiedOrNot.php",
-                 type : "POST",
-                 data : {email : email},
-                 success : function  (data) {
-                    if (data== 1) {
-                        console.log("verified");
-                         window.location.replace("http://localhost/genetics-testing/signin.php");
-                    } else{
-                        console.log("not-verified");
-                    }
-                 }
-             }) 
-       },5000)
-           
-         
+        console.log(email);
+        $.ajax({
+            url: "mailVerifiedOrNot.php",
+            type: "POST",
+            data: {
+                email: email
+            },
+            success: function(data) {
+                if (data == 1) {
+                    console.log("verified");
+                    window.location.replace("http://localhost/genetics-testing/signin.php");
+                } else {
+                    console.log("not-verified");
+                }
+            }
+        })
+    }, 5000)
 </script>
- 

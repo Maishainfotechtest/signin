@@ -1,19 +1,20 @@
-
 /*logout btn css */
-.logout{
-  position: absolute;
-    top: 10px;
-    padding: 4px 31px;
-    left: 0px;
-    font-weight: 500;
-    width: 144px;
-    background: #fcfafb;
 
+.logout {
+  position: absolute;
+  top: 10px;
+  padding: 4px 31px;
+  left: 0px;
+  font-weight: 500;
+  width: 144px;
+  background: #fcfafb;
 }
-#list{
-  display:  none;
+
+#list {
+  display: none;
 }
-#dashboardlink{
+
+#dashboardlink {
   position: absolute;
   width: 106%;
   background-color: white;
@@ -25,68 +26,175 @@
   padding: -1px;
   z-index: 23;
 }
- #signin:hover #list {
-display: block;
-} 
- 
-nav.main-menu ul.menu > li > #dashboardlink:before {
-content: none !important;
+
+#signin:hover #list {
+  display: block;
 }
+
+nav.main-menu ul.menu>li>#dashboardlink:before {
+  content: none !important;
+}
+
 /*sign in msg correct/invalid*/
-.SigninMsg{
+
+.SigninMsg {
   display: block;
   display: inline;
   background: inherit;
   margin: 0;
+  /* background: red; */
   padding: 0;
   /* border: 1px solid; */
   position: absolute;
   text-align: center;
   top: 14px;
   border-radius: 28px;
-  left: 82%;
-  width: 35px;
+  left: 75%;
+  width: 13px;
 }
-.invalidMsg{
+
+.forgetPassMsg {
+  position: initial;
+}
+
+.invalidMsg {
   padding: 0px;
   margin: 0;
   font-size: 12px;
   font-family: math;
-  position:  relative;
+  position: relative;
 }
 
-#label{
+#label {
   margin: 0;
   position: absolute;
   top: 13px;
   background: white;
   left: 22px;
-  width:  120px;
+  width: 120px;
 }
 
- 
+/***  warning message p */
+
+.warningMsg {
+  font-size: 12px;
+  padding: 0 13px;
+  margin: 0;
+  position: absolute;
+  top: 79px;
+}
+
 /* input in sign in */
- 
+
 button {
   color: #000;
   background-color: #999;
   margin-top: 20px;
 }
-.input{
+
+.togglemsg {
+  position: relative;
+  top: -54px;
+  left: 72%;
+  font-size: 12px;
+}
+
+.toggleInputs {
+  position: relative;
+  top: -19px;
+}
+
+.input {
   width: 100%;
   height: 49px;
   border: 1px solid #bbc7d4;
 }
+/***OTP div**/
+#otp{
+  width: 55%;
+    border: 1px solid #6c757d;
+    display: none;
+    position: absolute;
+    padding: 29px 3px 0 0;
+    background: white;
+    z-index: 33;
+    top: 43%;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50% ,-50%);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 16, 5, 0.96);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 16, 5, 0.96);
+    box-shadow: 0px 0px 5px 0px rgba(0, 16, 5, 0.96); 
+}
+
+/**OTP input css**/
+
+.inputOTP {
+  padding: 0 !important; 
+  width: 8% !important;
+  border-bottom: 2px solid #0369a4 !important;
+  outline: none !important;
+  text-align: center !important;
+   margin: 0 4px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/*** otp button validate **/
+#validate{
+  color: white;
+  border-radius: 7px;
+  font-weight: 400;
+  padding: 4px 10px;
+  background: #0b73a6;
+  margin: 10px 0;
+}
+#resendOtp{
+  margin: 8px 2px;
+  cursor: pointer;
+}
+
+/****loader css for message */
+
+#loaderPro {
+  display: none;
+  width: 294px;
+  left: 1%;
+  height: 338px;
+  position: absolute;
+  top: 9%;
+  background: rgb(236 227 227 / 75%);
+}
+
+.ldss-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  height: 111px;
+  z-index: 3;
+  left: 30%;
+  top: 33%;
+  width: 112px;
+  background: transparent;
+  margin: 8px;
+  border: 8px solid rgb(96, 149, 247);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: rgb(86, 164, 236) transparent transparent transparent;
+}
+
 /* The snackbarlightlight - position it at the bottom and in the middle of the screen */
+
 #snackbarlight {
-  visibility:  hidden;
+  visibility: hidden;
   transition-property: all .5s;
-  min-width:  auto;
+  min-width: auto;
   box-shadow: 1px 1px 1px 1px solid;
   margin-left: -130px;
-  box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
-  -webkit-box-shadow: -1px 1px 7px 1px rgba(0,0,0,0.75);
-  -moz-box-shadow: -1px 2px 82px 3px rgba(0,0,0,0.75);
+  box-shadow: -1px 2px 82px 3px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: -1px 1px 7px 1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 2px 82px 3px rgba(0, 0, 0, 0.75);
   background-color: #2190ad;
   color: #fff;
   text-align: center;
@@ -100,15 +208,14 @@ button {
   top: 37%;
   bottom: 0px;
 }
-  
-  /* 30px from the bottom */
 
+/* 30px from the bottom */
 
 /* Show the snackbarlight when clicking on a button (class added with JavaScript) */
+
 .show {
   visibility: visible !important;
   /* Show the snackbarlight */
-
   /* Add animation: Take 0.5 seconds to fade in and out the snackbarlight.
   However, delay the fade out process for 2.5 seconds */
   -webkit-animation: fadein 0.3s, fadeout 0.6s 3.5s;
@@ -116,12 +223,12 @@ button {
 }
 
 /* Animations to fade the snackbarlight in and out */
+
 @-webkit-keyframes fadein {
   from {
     bottom: 0;
     opacity: 0;
   }
-
   to {
     bottom: 30px;
     opacity: 1;
@@ -133,7 +240,6 @@ button {
     bottom: 0;
     opacity: 0;
   }
-
   to {
     bottom: 30px;
     opacity: 1;
@@ -145,7 +251,6 @@ button {
     bottom: 30px;
     opacity: 1;
   }
-
   to {
     bottom: 0;
     opacity: 0;
@@ -157,13 +262,13 @@ button {
     bottom: 30px;
     opacity: 1;
   }
-
   to {
     bottom: 0;
     opacity: 0;
   }
 }
- #verifyform , #forgetpass{
+
+#verifyform, #forgetpass {
   color: black;
   width: 34%;
   border: 1px solid;
@@ -176,27 +281,33 @@ button {
   background: #d6e2ef;
   height: 22vh;
   z-index: 3;
-   box-shadow: 0px 0px 6px -1px; 
-  transition:all 0.5s;
- }
-#closeicon{
+  box-shadow: 0px 0px 6px -1px;
+  transition: all 0.5s;
+}
+
+#closeicon {
   float: right;
   cursor: pointer;
   padding: 3px 6px;
 }
-.resendDIV{
+
+.resendDIV {
   position: absolute;
-    top: 97%;
-    left: 47%;
+  top: 97%;
+  left: 47%;
 }
-.heading{
+
+.heading {
   font-size: 1.5em;
 }
-.pcontent{
-  font-size:  1.3em;
+
+.pcontent {
+  font-size: 1.3em;
 }
- /*image upkpoad icon*/
- input[type="file"] {
+
+/*image upkpoad icon*/
+
+input[type="file"] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -205,31 +316,32 @@ button {
   overflow: hidden;
   border: 0;
 }
+
 .custom-file-upload {
   display: block;
-    padding: 3px 13px;
-    position: relative;
-    cursor: pointer;
-    height: 29px;
-    top: 164px;
-    left: -26px;
+  padding: 3px 13px;
+  position: relative;
+  cursor: pointer;
+  height: 29px;
+  top: 164px;
+  left: -26px;
 }
 
-.uploadicon{
-  cursor: pointer;
-  transition : all 0.4s;
+.uploadicon {
+  transition: all 0.4s;
   position: absolute;
   left: -30px;
   color: #0369a4;
-  left: 18px;
-  top: -15px;
+  left: 122px;
+  top: -145px;
 }
-.uploadicon:hover{
-   
-  font-size:30px;
-  color : black;
+
+.uploadicon:hover {
+  font-size: 30px;
+  color: black;
 }
-#btn{
+
+#btn {
   color: black;
   border: 1px solid #bb9fac;
   padding: 3px 15px;
@@ -241,74 +353,83 @@ button {
   position: absolute;
   top: 105%;
   font-family: 'FontAwesome';
-  transition : all 0.6s;
+  transition: all 0.6s;
 }
-#btn:hover{
+
+#btn:hover {
   box-shadow: 0 0.5em 0.5em -0.4em var(--dark);
   transform: translateY(-0.25em);
   color: white;
-  border-radius : 4px;
-  
-  letter-spacing :2px;
+  border-radius: 4px;
+  letter-spacing: 2px;
   background-color: rgb(3 105 164);
 }
-.imgcss{
+
+.imgcss {
   width: 100%;
-    height: 106px !important;
-}
-.position{
-  position: relative;
-    top: -37px;
+  height: 106px !important;
 }
 
-.valEror{
+.position {
+  position: relative;
+  top: -37px;
+}
+
+.valEror {
   position: absolute;
   top: 100%;
   left: 4%;
 }
-.valSuccess{
+
+.valSuccess {
   position: absolute;
-    top: 54%;
-    left: 90%;
-    background: inherit;
+  top: 54%;
+  left: 90%;
+  background: inherit;
 }
- /*22222222222222222222 loader 22222222222222222222222222*/
- .lds-ring {
+
+/*22222222222222222222 loader 22222222222222222222222222*/
+
+.lds-ring {
   display: inline-block;
   position: absolute;
   width: 98vw;
   top: -30%;
-   
   height: 122vh;
   background: #e1e0e0b0;
   left: -43%;
   z-index: 1;
 }
+
 .lds-ring div {
   box-sizing: border-box;
-    display: block;
-    position: absolute;
-    height: 164px;
-    z-index: 3;
-    left: 44%;
-    top: 33%;
-    width: 170px;
-    background: white;
-    margin: 8px;
-    border: 8px solid rgb(96, 149, 247);
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: rgb(86, 164, 236) transparent transparent transparent;
+  display: block;
+  position: absolute;
+  height: 164px;
+  z-index: 3;
+  left: 44%;
+  top: 33%;
+  width: 170px;
+  background: white;
+  margin: 8px;
+  border: 8px solid rgb(96, 149, 247);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: rgb(86, 164, 236) transparent transparent transparent;
 }
+
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
 }
+
 .lds-ring div:nth-child(2) {
   animation-delay: -0.3s;
 }
+
 .lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
   0% {
     transform: rotate(0deg);
@@ -319,67 +440,65 @@ button {
 }
 
 /*loader css*/
-#loader{
-  display:  none;
+
+#loader {
+  display: none;
 }
- 
+
 /* Medium devices (tablets, 768px and up) */
-@media (max-width: 480px) { 
-  #verifyform,#forgetpass{
+
+@media (max-width: 480px) {
+  #verifyform, #forgetpass {
     width: 100%;
     left: 50%;
     height: 22vh;
     top: 12%;
   }
- 
-#varifyformdiv {
-  position: relative;
-  top: -24px;
-}
-.faq {
-  margin-left: 0em;
-}
-.heading{
-  font-size: 1.5em;
-}
-.pcontent{
-  font-size: 1em;
-}
-.resendDIV{
-  position: absolute;
+  #varifyformdiv {
+    position: relative;
+    top: -24px;
+  }
+  .faq {
+    margin-left: 0em;
+  }
+  .heading {
+    font-size: 1.5em;
+  }
+  .pcontent {
+    font-size: 1em;
+  }
+  .resendDIV {
+    position: absolute;
     top: 97%;
     left: 37%;
-}
-  .output_message{
+  }
+  .output_message {
     display: none;
   }
-
   #snackbarlight {
     left: 53%;
   }
-  .heading3{
+  .heading3 {
     font-size: 2em;
     text-align: center;
   }
-  #dashboardlink{
-  padding: 5px 0;
-  width: 41%;
-  top: -11px;
-    
+  #dashboardlink {
+    padding: 5px 0;
+    width: 41%;
+    top: -11px;
   }
-  .logout{
+  .logout {
     padding: 10px 24px;
   }
-  #btn{
+  #btn {
     padding: 3px 15px;
     width: 110px;
     position: relative;
     left: 62%;
     text-transform: capitalize;
     margin: 2px 0;
-    
   }
-  .uploadicon{
+  .uploadicon {
     cursor: pointer;
     /* margin: 0; */
     top: 91%;
@@ -387,6 +506,4 @@ button {
     position: absolute;
     left: 7%;
   }
-  
 }
-

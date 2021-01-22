@@ -50,36 +50,7 @@ if (isset($_SESSION['username'])) {
   <script>
     window.location.replace("http://localhost/genetics-testing/index.php");
   </script>
-  <?php
-}
-
-//updating userdata 
-
-if (isset($_POST['update'])) {
-  $fname = $_POST['first_name'];
-  $lname = $_POST['last_name'];
-
-  $country = $_POST['country'];
-  $state = $_POST['state'];
-  $city = $_POST['city'];
-  $address = $_POST['address'];
-
-  $updateQuery = "UPDATE `users` SET `f_name`= '$fname',`l_name`= '$lname', `countrycode`='$country',`state`='$state',`city`='$city',`address`='$address' WHERE email='$email'";
-
-  $runQuery = mysqli_query($conn, $updateQuery);
-  if ($runQuery) {
-    echo "updated";
-    $_SESSION['username'] = $fname;
-  ?>
-    <script>
-      window.location.replace("http://localhost/genetics-testing/dashboard.php");
-    </script>
-    <?php
-    ?>
-
-    <?php } else {
-    echo "failed due to " . mysqli_error($conn);
-  }
+<?php
 }
 
 
@@ -96,52 +67,7 @@ if ($userImage['imgSrc'] == "") {
   $imageAddress =  $userImage['imgSrc'];
   $AddUpdate = "change";
 }
-// Check if form was submitted   insert image  
-$response = "";
-if (isset($_POST['upload'])) {
-  $name = $_SESSION['name'];
-  $email = $_SESSION['email'];
-  $filename  = $_FILES['image']["name"];
-
-  $tempname = $_FILES['image']["tmp_name"];
-  //image details for validation
-  $fileinfo = getimagesize($_FILES["image"]["tmp_name"]);
-  $width = $fileinfo[0];
-  $height = $fileinfo[1];
-  //array for image extension validation
-  $allowed_image_extension = array("png", "jpg", "jpeg");
-  //print_r($fileinfo);
-  //print_r($_FILES["image"]);
-  $folderpath = "./images/usersImage/" . $filename;
-  $fileupload = move_uploaded_file($tempname, $folderpath);
-  // Get image file extension
-  $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
-  if (!in_array($file_extension, $allowed_image_extension)) {
-    $response =  "invalid image extension. Only PNG and JPEG are allowed.";
-  }
-  //get image size forvalidation 
-  else if (($_FILES["image"]["size"] > 200000)) {
-    $response =  "Image size exceeds 200kb";
-  } else {
-    //if all conditions are false then image will uploaded on database
-    $insertimage = "INSERT INTO `userimages` (`id`, `name`, `imgSrc`, `email`) VALUES (NULL, '$name', '$folderpath', '$email')";
-    $runQuery = mysqli_query($conn, $insertimage);
-    if ($runQuery) { ?>
-      <script>
-        window.location.replace("http://localhost/genetics-testing/dashboard.php");
-      </script>
-<?php } else {
-      echo "image not uploaded";
-    }
-  }
-}
-
 ?>
-
-<?php
- 
-?>
-
 <!-- page-title -->
 
 <section class="dashboard_bg">
@@ -183,14 +109,15 @@ if (isset($_POST['upload'])) {
               <div class="heading">Welcome to Dashboard</div>
               <div class="row">
                 <div class="col-sm-12">
-                  <p class="text-danger text-capitalize font-weight-bold"><?php echo $response; ?></p>
+
                   <div class="dasboard_head">Account Details <p class="btn edit_btn" style="cursor: pointer;" id="click"><i class="fa fa-edit"></i> Edit Account</p>
                   </div>
                   <div class="row">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-12 position">
-                     
-                      <form action="dashboard.php" id="submit-group"    >
-                        <label for="file-upload" class="custom-file-upload"> <i for class="fa fa-2x fa-pencil-square-o  uploadicon" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="<?php echo $AddUpdate; ?>"></i>
+
+                      <form action="dashboard.php" id="submit-group">
+                        <label for="file-upload" class="custom-file-upload">
+                          <i for class="fa fa-2x fa-pencil-square-o  uploadicon" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="<?php echo $AddUpdate; ?>"></i>
                           <p style="width: 247px;margin: 4px 36px;" class="text-capitalize text-success font-weight" id="fileMsg"> </p>
                         </label>
                         <center><input type="file" name="file" id="file-upload" required>
@@ -221,7 +148,21 @@ if (isset($_POST['upload'])) {
             <!-- tab1 end -->
             <div class="content-inner  " id="personalInfo">
               <div class="heading">Personal Information</div>
+              <!-- OTP FORM --->
+              <div id="otp">
+                <h5 class="text-capitalize text-muted"> Enter the OTP to verify your phone number</h5>
+                <p class="text-capitalize   " style="font-size: 12px; margin:0;">an OTP(one time password) has been sent to XXXXXXXXXX</p>
+                <div class="inputsforOtp">
+                  <input class="inputOTP" type="text" name="" id="">
+                  <input class="inputOTP" type="text" name="" id="">
+                  <input class="inputOTP" type="text" name="" id="">
+                  <input class="inputOTP" type="text" name="" id="">
 
+                </div>
+                <p class="text-capitalize" id="resendOtp">resend OTP :<span style="margin: 0 13px; cursor:text">1.02</span></p>
+                <button class="text-capitalize" id="validate">Validate OTP</button>
+              </div>
+              <!-- /OTP FORM --->
               <form action="" method="post">
                 <div class="row">
                   <div class="form-group col-sm-6">
@@ -239,7 +180,7 @@ if (isset($_POST['upload'])) {
                   </div>
                   <div class="form-group col-sm-6">
                     <label>Contact No</label><span class="text-danger" id="ProfilephoneError"> </span> &nbsp;<span class=" text-success" id="Profilephonesuccess"> </span>
-                    <input type="text" class="  m-0 p-2" name="phone" id="Profliephone" disabled="disabled" style="cursor: not-allowed;" value="<?php echo $userData['mobile']; ?>" class="form-control text-capitalize" onkeyup="ProfilephoneVal()" required>
+                    <input type="text" class="  m-0 p-2" name="mobile" id="Profliephone" value="<?php echo $userData['mobile']; ?>" class="form-control text-capitalize" onkeyup="ProfilephoneVal()" required>
                   </div>
                   <div class="form-group col-sm-6">
                     <label>Country</label>
@@ -275,7 +216,7 @@ if (isset($_POST['upload'])) {
                     <textarea name="address" id="address" class="form-control text-capitalize" style="min-height:65px;" placeholder="Enter Address" required><?php echo $userData['address']; ?></textarea>
                   </div>
                   <div class="form-group col-sm-12">
-                    <button type="submit" name="update" id="updateProf" class="btn2">Update</button>
+                    <button type=" " name="update" id="updateProf" class="btn2">Update</button>
                   </div>
                 </div>
               </form>
@@ -382,13 +323,12 @@ if (isset($_POST['upload'])) {
 
               <form action="" method="" id="" name="">
                 <div class="row">
-                  <div class="form-group col-sm-6">
-                    <label>Current Password</label>
-                    <input type="password" name="current_pass" id="current_pass" value="" class="form-control" placeholder="Type Current Password">
-                  </div>
+
                   <div class="form-group col-sm-6">
                     <label>New Password</label>
                     <input type="password" name="new_pass" id="new_pass" value="" class="form-control" placeholder="Type New Password">
+                    <p id="pserror" class="text-danger"></p>
+                    <p id="psSucc"></p>
                   </div>
                   <div class="form-group col-sm-6">
                     <label>Confirm Password</label>
@@ -414,15 +354,10 @@ if (isset($_POST['upload'])) {
   </div>
 </section>
 <!-- page-title end-->
-
-
-
-
-
-
 <!--footer start-->
 <?php include('includes/footer.php')
 ?>
+<!-- Image update and settings -->
 <script>
   $(document).ready(function() {
 
@@ -435,7 +370,7 @@ if (isset($_POST['upload'])) {
       setTimeout(function() {
         $('#loader').css('display', 'none');
       }, 500);
-      
+
       var fileData = new FormData($("#submit-group")[0]);
       console.log(fileData);
       $.ajax({
@@ -452,23 +387,11 @@ if (isset($_POST['upload'])) {
         }
       });
     });
-
-
-    /* $("#country").change(function  () {
-           var cid =  $("#country").find(':selected').attr('key');
-           console.log(cid);
-           $.ajax({
-               url : "state.php",
-               method : "POST",
-               data : {cid : cid},
-               success : function  (res) {
-                   $('#state').html(res);
-               }
-           })
-       })*/
   });
 </script>
+
 <script>
+  //to toggle user from user details to edit details page
   $(document).ready(function() {
     $('#click').click(function() {
       $('#dashbaordDiv').removeClass('active');
@@ -479,9 +402,30 @@ if (isset($_POST['upload'])) {
       $('#personalInfo').removeAttr("style");
     });
 
+    //to check new password value 
+    $('#new_pass').on("keyup", function() {
+      var newPass = this.value;
+      var pas = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+      if (!newPass.match(pas)) {
+        $('#pserror').text("password between 7 to 15 characters which contain at least one numeric digit and a special character");
+      } else {
+        $('#pserror').text(" ");
+      }
+    })
+
+    //logout user from dashboard on click on logOut option  
     $('#logout').click(function() {
       window.location.replace("logout.php");
     })
   })
 </script>
- 
+
+<script>
+  $(document).ready(function  () {
+    $('#updateProf').on("click",function (){
+      var fname = $('#prof_f_name').val();
+      var lname = $('#Profile_l_name').val();
+      var email = $('').val();
+    })
+  })
+</script>
