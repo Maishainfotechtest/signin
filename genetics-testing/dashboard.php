@@ -147,21 +147,30 @@ if ($userImage['imgSrc'] == "") {
             </div>
             <!-- tab1 end -->
             <div class="content-inner  " id="personalInfo">
-            <div id="returnMSG" class="text-success"></div>
+              <div id="returnMSG" class="text-success"></div>
               <div class="heading">Personal Information</div>
               <!-- OTP FORM --->
               <div id="otp">
+                <!-- <i class="fa fa-times-circle" aria-hidden="true" id="otpclose"></i> -->
                 <h5 class="text-capitalize text-muted"> Enter the OTP to verify your phone number</h5>
-                <p class="text-capitalize   " style="font-size: 12px; margin:0;">an OTP(one time password) has been sent to XXXXXXXXXX</p>
+
+                <p class="text-capitalize   " style="font-size: 12px; margin:0;">an OTP(one time password) has been sent to <spani id="conNum"></span></p>
                 <div class="inputsforOtp">
-                  <input class="inputOTP" type="text" name="" id="">
-                  <input class="inputOTP" type="text" name="" id="">
-                  <input class="inputOTP" type="text" name="" id="">
-                  <input class="inputOTP" type="text" name="" id="">
+                  <form id="otpform">
+                    <input class="inputOTP" maxlength="1" placeholder="#" type="text" name="" id="otp1">
+                    <input class="inputOTP" maxlength="1" placeholder="#" type="text" name="" id="otp2">
+                    <input class="inputOTP" maxlength="1" placeholder="#" type="text" name="" id="otp3">
+                    <input class="inputOTP" maxlength="1" placeholder="#" type="text" name="" id="otp4">
+
+                  </form>
 
                 </div>
-                <p class="text-capitalize" id="resendOtp">resend OTP :<span style="margin: 0 13px; cursor:text">1.02</span></p>
-                <button class="text-capitalize" id="validate">Validate OTP</button>
+                <p class="text-capitalize"><button id="resendOtp">resend OTP</button> : <span>0.</span><span style="margin: 0px; cursor:text" id="timer">10</span></p>
+                <div id="">
+                  <span class="text-success text-capitalize" id="true"></span><span class="text-danger text-capitalize" id="false"></span>
+                </div>
+
+                <button class="text-capitalize" id="validate">VERIFY</button>
               </div>
               <!-- /OTP FORM --->
               <form action="" method="post">
@@ -180,7 +189,7 @@ if ($userImage['imgSrc'] == "") {
                     <input type="email" class="  m-0 p-2" name="email" id="email" disabled="disabled" style="cursor: not-allowed;" value="<?php echo $userData['email']; ?>" class="form-control " placeholder="">
                   </div>
                   <div class="form-group col-sm-6">
-                    <label>Contact No</label><span class="text-danger" id="ProfilephoneError"> </span> &nbsp;<span class=" text-success" id="Profilephonesuccess"> </span>
+                    <label>Contact No</label><span class="text-danger valEror" id="ProfilephoneError"> </span> &nbsp;<span class=" text-success valSuccess" id="Profilephonesuccess"> </span>
                     <input type="text" class="  m-0 p-2" name="mobile" id="Profliephone" value="<?php echo $userData['mobile']; ?>" class="form-control text-capitalize" onkeyup="ProfilephoneVal()" required>
                   </div>
                   <div class="form-group col-sm-6">
@@ -212,6 +221,15 @@ if ($userImage['imgSrc'] == "") {
                       <option value="<?php echo  $cityname; ?>"><?php echo  $cityname; ?></option>
                     </select>
                   </div>
+                  <!--  
+                    
+                  <div class="form-group col-sm-6 date">
+                    <label for="" id="label"> DD/MM/YY</label>
+                    <input type="date" name="date" id="date" oninput="dateVal()" min="1940-01-31" date_format="dd/mm/yy" value="2000-01-31" max="2018-12-31" class="form-control inputsignin" required>
+                    <p class="text-danger invalidMsg text-capitalize" id="dateError"></p>
+                    <p class="text-success SigninMsg text-capitalize" id="dateSuccess"></p>
+                  </div>-->
+
                   <div class="form-group col-sm-12">
                     <label>Address</label><span class="text-danger" id=""> </span> &nbsp;<span class="text-success" id=""> </span>
                     <textarea name="address" id="address" class="form-control text-capitalize" style="min-height:65px;" placeholder="Enter Address" required><?php echo $userData['address']; ?></textarea>
@@ -422,8 +440,27 @@ if ($userImage['imgSrc'] == "") {
 </script>
 
 <script>
-  $(document).ready(function  () {
-    $('#updateProf').on("click",function (){
+  $(document).ready(function() {
+    function timer() {
+      var time = 10;
+      var timer = setInterval(function() {
+        time--;
+        if (time >= 0) {
+          $('#timer').text(time);
+          $('#resendOtp').attr("disabled", "disabled");
+          $('#resendOtp').css("cursor", "not-allowed");
+        }
+        if (time < 0) {
+
+          clearInterval(timer);
+          $('#resendOtp').removeAttr("disabled", "disabled");
+          $('#resendOtp').css("cursor", "pointer");
+        }
+      }, 1000);
+
+    }
+
+    $('#updateProf').on("click", function() {
       var fname = $('#prof_f_name').val();
       var lname = $('#Profile_l_name').val();
       var contact = $('#Profliephone').val();
@@ -432,24 +469,105 @@ if ($userImage['imgSrc'] == "") {
       var state = $('#state').val();
       var city = $('#city').val();
       var address = $('#address').val();
-      
+      timer();
+      //updating users data
       $.ajax({
-        url : "udateDashBoardData.php",
-        type : "POST",
-        data : {
-          fname : fname,
-          lname : lname,
-          contact : contact,
+        url: "udateDashBoardData.php",
+        type: "POST",
+        data: {
+          fname: fname,
+          lname: lname,
+          contact: contact,
           email: email,
-          country : country,
-          state : state,
-          city : city,
-          address : address
+          country: country,
+          state: state,
+          city: city,
+          address: address
         },
-        success : function(data){
+        success: function(data) {
           $('#returnMSG').html(data);
         }
       })
+      //inserting contry code and contact in tempusers 
+
+      $.ajax({
+        url: "sendOtp.php",
+        type: "POST",
+        data: {
+          number: contact,
+          countrycode: country,
+
+        },
+        success: function(data) {
+          if (data == 1) {
+            $("#otp").css("display", "none");
+          } else {
+            $("#otp").css("display", "block");
+            $('#conNum').text(contact);
+
+          }
+        }
+      })
+      //validating otp for mobile verification
+      $("#validate").on("click", function() {
+        var otp1 = $('#otp1').val();
+        var otp2 = $('#otp2').val();
+        var otp3 = $('#otp3').val();
+        var otp4 = $('#otp4').val();
+        var enteredOtp = otp1 + otp2 + otp3 + otp4;
+        console.log(enteredOtp);
+        $.ajax({
+          url: "validateOtp.php",
+          type: "POST",
+          data: {
+            userOtp: enteredOtp,
+            contact: contact
+          },
+          success: function(data) {
+            if (data == 1) {
+              $('#true').text("mobile number verified");
+              $('#false').text(" ");
+              setTimeout(function() {
+                window.location.replace("http://localhost/genetics-testing/dashboard.php");
+              }, 2000)
+            } else {
+              $('#false').text("Invalid OTP");
+              $('#true').text(" ");
+            }
+          }
+        })
+      })
+
     })
+
+    $('#resendOtp').on("click", function() {
+      $('#otpform')[0].reset();
+      $('#false').text("");
+      var resend = "resendOtp";
+      var contact = $('#Profliephone').val();
+      timer();
+      $.ajax({
+        url: "resendOtp.php",
+        type: "POST",
+        data: {
+          resend: resend,
+          contact: contact
+        },
+        success: function(data) {
+
+        }
+      })
+      console.log("clicked");
+    })
+    /* $('#otpclose').on("click",function  () {
+       $('#otp').hide();
+       $('#otpform')[0].reset();
+     })*/
   })
+  window.onbeforeunload = function() {
+    return "Dude, are you sure you want to leave? Think of the kittens!";
+  }
+  $(document).on("submit", "form", function(event) {
+    window.onbeforeunload = null;
+  });
 </script>

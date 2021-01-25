@@ -7,6 +7,6 @@ session_destroy();
 //redirect page to index.php
  ?>
     <script>
-    window.location.replace("http://localhost/genetics-testing/signin.php");
+    window.location.replace("http://localhost/genetics-testing/");
     </script>
     

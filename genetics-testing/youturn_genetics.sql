@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2021 at 12:54 PM
+-- Generation Time: Jan 25, 2021 at 01:25 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -54849,14 +54849,6 @@ CREATE TABLE `userfeedback` (
   `status` varchar(50) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `userfeedback`
---
-
-INSERT INTO `userfeedback` (`id`, `name`, `phone`, `email`, `subject`, `message`, `date`, `time`, `status`) VALUES
-(1, 'arjun', '6742566756', 'arjun@gmail.com', 'ew', 'wew', '22-01-2021', '15:57:48', 'pending'),
-(2, 'arjun', '6742566756', 'arjun@gmail.com', 'sd', 'sd', '22-01-2021', '15:57:56', 'pending');
-
 -- --------------------------------------------------------
 
 --
@@ -54875,13 +54867,8 @@ CREATE TABLE `userimages` (
 --
 
 INSERT INTO `userimages` (`id`, `name`, `imgSrc`, `email`) VALUES
-(6, 'arjun', './images/usersImage/1868703752.jpg', 'arjun@gmail.com'),
-(5, 'lokesh', './images/usersImage/902022611.jpg', 'lokeshgaria8811@gmail.com'),
 (2, 'Youturn', '', 'maishainfotech123@gmail.com'),
-(3, 'Maisha', '', 'maishatest89@gmail.com'),
-(1, 'adssd', './images/usersImage/538461315.jpg', 'rohanrawat@gmail.com'),
-(7, 'sds', './images/usersImage/2107627207.jpg', 'sad@gmail.com'),
-(4, 'tarun', './images/usersImage/54754604.jpg', 'tarun@gmail.com');
+(1, 'Maisha', '', 'maishatest89@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -54915,13 +54902,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `cid`, `f_name`, `l_name`, `email`, `email_verify`, `countrycode`, `state`, `city`, `address`, `mobile`, `mobile_verify`, `DOB`, `password`, `joindate`, `jointime`, `datetime`, `status`) VALUES
-(6, 'e6ffc7b0f0e11874 ', 'arjun', 'garia', 'arjun@gmail.com', 'yes', ' +93', NULL, NULL, NULL, '6742566756', 'no', '2000-01-06', 'arjun@1', '2021-01-22', '11:25:56', '22-01-2021 15:55:56', 'active'),
-(5, 'c0ae7f9be1dcd567 ', 'lokesh', 'garia', 'lokeshgaria8811@gmail.com', 'yes', ' +213', 'select state.', 'select  city.', 'd-1/54dsfsd', '3432432344', 'no', '2000-01-27', 'lokesh@1', '2021-01-22', '10:32:39', '22-01-2021 15:02:39', 'active'),
-(2, 'fb106952761347133', 'Youturn', 'Genetics', 'maishainfotech123@gmail.com', 'yes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-01-21', '12:40:34', '21-01-2021 17:10:34', 'active'),
-(3, 'Gog107851509822761922901', 'Maisha', 'Google', 'maishatest89@gmail.com', 'yes', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-01-21', '01:11:28', '21-01-2021 17:41:28', 'active'),
-(1, '18be85b2870449e9 ', 'adssd', 'sda', 'rohanrawat@gmail.com', 'yes', ' +43', NULL, NULL, NULL, '6742566756', 'no', '2000-01-05', 'lokesh@1', '2021-01-21', '12:39:04', '21-01-2021 17:09:04', 'active'),
-(7, 'fc03b577ab1c0871 ', 'sds', 'sad', 'sad@gmail.com', 'yes', ' +355', NULL, NULL, NULL, '2222222222', 'no', '2000-01-14', 'lokesh@1', '2021-01-22', '11:28:36', '22-01-2021 15:58:36', 'active'),
-(4, 'f61744e5ed4400f0 ', 'tarun', 'adhikari', 'tarun@gmail.com', 'yes', ' +1684', NULL, NULL, NULL, '9844534242', 'no', '2000-01-13', 'tarun@1', '2021-01-22', '05:27:41', '22-01-2021 09:57:41', 'active');
+(2, 'fb106952761347133', 'Youturn', 'Genetics', 'maishainfotech123@gmail.com', 'yes', '+54', 'Cordoba', 'Alta Gracia', 'patna', '9987674350', 'no', NULL, NULL, '2021-01-25', '12:53:47', '25-01-2021 17:23:47', 'active'),
+(1, 'Gog107851509822761922901', 'Maisha', 'Google', 'maishatest89@gmail.com', 'yes', '+213', 'Algiers', 'Hydra', 'nsp', '8076251920', 'yes', NULL, NULL, '2021-01-25', '12:48:20', '25-01-2021 17:18:20', 'active');
 
 -- --------------------------------------------------------
 
@@ -55092,7 +55074,8 @@ ALTER TABLE `users`
 -- Indexes for table `usertemptable`
 --
 ALTER TABLE `usertemptable`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`mobile`),
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -55228,19 +55211,19 @@ ALTER TABLE `traits_name_male`
 -- AUTO_INCREMENT for table `userfeedback`
 --
 ALTER TABLE `userfeedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `userimages`
 --
 ALTER TABLE `userimages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `usertemptable`
